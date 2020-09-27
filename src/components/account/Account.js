@@ -333,7 +333,7 @@ function Account() {
                                 }
                                 {accessv.data.accessverify.createexpense === "yes" ?
                                     <TabPanel value={value} index={4}>
-                                        <Expenses />
+                                        <Expenses refetcher={totals.refetch} />
                                     </TabPanel>
                                     :
                                     <TabPanel value={value} index={4}>
@@ -342,7 +342,7 @@ function Account() {
                                 }
                                 {accessv.data.accessverify.editexpense === "yes" || accessv.data.accessverify.deleteexpense === "yes" ?
                                     <TabPanel value={value} index={5}>
-                                        <EditExpenses />
+                                        <EditExpenses refetcher={totals.refetch} />
                                     </TabPanel>
                                     :
                                     <TabPanel value={value} index={5}>

@@ -30,7 +30,7 @@ const EXPENSES = gql`
     }
 `;
 
-function Expenses() {
+function Expenses(props) {
 
     const userinfo = JSON.parse(localStorage.getItem("userinfo"));
     const [expensesmut] = useMutation(EXPENSES);
@@ -77,6 +77,9 @@ function Expenses() {
             nextClickSet(false);
             if (data.expenses.error === "no") {
                 PopBoxerEnd(true); PopBox("Successfully Saved");
+                if (props.refetcher !== undefined) {
+                    props.refetcher();
+                }
             }
         }).catch((e) => MutationError(e.toString()));
     }
