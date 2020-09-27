@@ -1,0 +1,20 @@
+{
+  "short_name": "Yanchangi",
+  "name": "Yanchangi",
+  "icons": [
+    {
+      "src": "textail-logo.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "textail-logo.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "rgb(107, 43, 8)",
+  "background_color": "rgb(107, 43, 8)"
+}
