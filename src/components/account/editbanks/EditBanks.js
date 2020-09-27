@@ -240,9 +240,10 @@ function EditBanks(props) {
                                         </CardContent>
                                         <CardContent>
                                             <p className="describtionjobcontainer01"><span>Name:</span> {t.bankname}</p>
-                                            <p className="describtionjobcontainer01"><span>Balance:</span> {Naira(t.bankamount)}</p>
+                                            <p className="describtionjobcontainer01"><span>Opening Balance:</span> {Naira(t.bankbalance)}</p>
                                             <p className="describtionjobcontainer01"><span>Account Number:</span> {t.bankaccountnumber}</p>
                                             <p className="describtionjobcontainer01"><span>Account Name:</span> {t.bankaccountname}</p>
+                                            <p className="describtionjobcontainer01"><span>Actual Balance:</span> {Naira(t.bankamount)}</p>
                                             <div className="changefloat2"></div>
                                             <p className="timejobcontainer01">{t.date}</p>
                                         </CardContent>
