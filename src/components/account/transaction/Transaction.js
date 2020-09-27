@@ -250,14 +250,14 @@ function Transaction(props) {
                     <TextField
                         id="supplieraccountnoid" placeholder="Supplier Account No" fullWidth={true}
                         margin="normal" variant="outlined" defaultValue={props.supplieraccountno !== undefined ? props.supplieraccountno : ""} />
-                    <p className="accountnumbergenerator" onClick={() => GenerateSupplierAccountNumber()}>Generate A.N</p>
+                    <p className="accountnumbergenerator" onClick={() => GenerateSupplierAccountNumber()}>Generate S.A.N</p>
                     <TextField
                         id="customerid" placeholder="Customer Name" fullWidth={true}
                         margin="normal" variant="outlined" defaultValue={props.customername !== undefined ? props.customername : ""} />
                     <TextField
                         id="customeraccountnoid" placeholder="Customer Account No" fullWidth={true}
                         margin="normal" variant="outlined" defaultValue={props.customeraccountno !== undefined ? props.customeraccountno : ""} />
-                    <p className="accountnumbergenerator" onClick={() => GenerateCustomerAccountNumber()}>Generate A.N</p>
+                    <p className="accountnumbergenerator" onClick={() => GenerateCustomerAccountNumber()}>Generate C.A.N</p>
                     <TextField
                         id="rate2id" label="Customer Rate" fullWidth={true}
                         margin="normal" variant="outlined" onChange={() => NGN2Func()} />
