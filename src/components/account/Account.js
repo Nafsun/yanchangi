@@ -57,7 +57,7 @@ const CHANGEEMAIL = gql`
 const TOTALTRANSACTIONS = gql`
     query totaltransactions($username: String, $jwtauth: String){
         totaltransactions(username: $username, jwtauth: $jwtauth){
-            totalbalance, totaldebt, totaloverdraft, net, totalprofit
+            totalbalance, totaldebt, totaloverdraft, net, totalprofit, totalexpense, netprofit
         }
     }
 `;
@@ -233,14 +233,15 @@ function Account() {
                                     </Grid>
                                     <Divider />
                                     <div className="accountspace">
-                                        <p className="accountinfo">{data.accountInfo.fullname} ({data.accountInfo.username})</p>
-                                        <p className="accountinfo">{data.accountInfo.email} {data.accountInfo.emailverify !== "yes" ? <Edit onClick={() => UnhideEmailEdit()} style={{ width: "1em", height: "1em", cursor: "pointer" }} /> : ""}</p>
+                                        {data.accountInfo.emailverify === "yes" ? "" : <p className="accountinfo">{data.accountInfo.email} {data.accountInfo.emailverify !== "yes" ? <Edit onClick={() => UnhideEmailEdit()} style={{ width: "1em", height: "1em", cursor: "pointer" }} /> : ""}</p>}
                                         <p className="accountinfo">{data.accountInfo.businessname === null || data.accountInfo.businessname === "" ? "" : data.accountInfo.businessname}</p>
                                         <p className="accountinfo">Total Balance: <span className="totality">{waitloadGet2 === false ? "" : Naira(totals.data.totaltransactions.totalbalance)}</span></p>
                                         <p className="accountinfo">Total Debt: <span className="totality">{waitloadGet2 === false ? "" : Naira(totals.data.totaltransactions.totaldebt)}</span></p>
                                         <p className="accountinfo">Total Overdraft: <span className="totality">{waitloadGet2 === false ? "" : Naira(totals.data.totaltransactions.totaloverdraft)}</span></p>
+                                        <p className="accountinfo">Total Expenses: <span className="totality">{waitloadGet2 === false ? "" : Naira(totals.data.totaltransactions.totalexpense)}</span></p>
                                         <p className="accountinfo">Net: <span className="totality">{waitloadGet2 === false ? "" : Naira(totals.data.totaltransactions.net)}</span></p>
                                         <p className="accountinfo">Total Profit: <span className="totality">{waitloadGet2 === false ? "" : Naira(totals.data.totaltransactions.totalprofit)}</span></p>
+                                        <p className="accountinfo">Net Profit: <span className="totality">{waitloadGet2 === false ? "" : Naira(totals.data.totaltransactions.netprofit)}</span></p>
                                         {editEmailGet === true ?
                                             <div>
                                                 <ThemeProvider theme={theme}>
