@@ -25,7 +25,7 @@ import NoInternetConnection from '../../nointernetconnection/NoInternetConnectio
 const ALLBANKS = gql`
     query allbanksget($username: String, $jwtauth: String){
         allbanksget(username: $username, jwtauth: $jwtauth){
-            id, username, bankname, bankaccountnumber, bankaccountname, bankamount, date
+            id, username, bankname, bankaccountnumber, bankaccountname, bankamount, bankbalance, date
         }
     }
 `;
@@ -150,8 +150,8 @@ function EditBanks(props) {
         PopBoxerEnd(false);
     }
 
-    const OpenEdit = (id, bankname, bankaccountnumber, bankaccountname, bankamount) => {
-        idSet(id); bankamountSet(bankamount); bankaccountnumberSet(bankaccountnumber);
+    const OpenEdit = (id, bankname, bankaccountnumber, bankaccountname, bankbalance) => {
+        idSet(id); bankamountSet(bankbalance); bankaccountnumberSet(bankaccountnumber);
         bankaccountnameSet(bankaccountname); BankNameSet(bankname);
         editSet(true);
     }
@@ -232,7 +232,7 @@ function EditBanks(props) {
                                                             <ListItem onClick={() => BringOutDelete(t.id)}>Delete</ListItem>
                                                         : ""}
                                                         {accessv.data.accessverify.editbank === "yes" ?
-                                                            <ListItem onClick={() => OpenEdit(t.id, t.bankname, t.bankaccountnumber, t.bankaccountname, t.bankamount)}>Edit</ListItem>
+                                                            <ListItem onClick={() => OpenEdit(t.id, t.bankname, t.bankaccountnumber, t.bankaccountname, t.bankbalance)}>Edit</ListItem>
                                                         : ""}
                                                     </List>
                                                 </IconMenu>
