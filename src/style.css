@@ -3684,3 +3684,12 @@ a:hover{
     color: rgb(107, 43, 8);
     text-align: center;
 }
+.accountnumbergenerator{
+    text-align: right;
+    font-size:14px;
+    font-family: sans-serif;
+    color: rgb(107, 43, 8);
+    margin-top:0px;
+    margin-bottom: -5px;
+    cursor: pointer;
+}

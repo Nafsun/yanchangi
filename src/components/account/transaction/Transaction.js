@@ -31,10 +31,19 @@ const GETPREVIOUSUSERSINFO = gql`
     }
 `;
 
+const GENERATEACCOUNTNUMBER = gql`
+    mutation generateaccountnumber($username: String, $jwtauth: String){
+        generateaccountnumber(username: $username, jwtauth: $jwtauth){
+            newaccountnumber, error
+        }
+    }
+`;
+
 function Transaction(props) {
 
     const userinfo = JSON.parse(localStorage.getItem("userinfo"));
     const [buyandsellinsertmut] = useMutation(BUYANDSELLINSERT);
+    const [generateaccountnumbermut] = useMutation(GENERATEACCOUNTNUMBER);
     const [nextClickGet, nextClickSet] = useState(false);
     const [PopBoxerStart, PopBoxerEnd] = useState(false);
     const [PopBoxTextGet, PopBoxTextSet] = useState(null);
@@ -109,6 +118,32 @@ function Transaction(props) {
             }else if (data.buyandsellinsert.error === "customeraccountnotaken") {
                 PopBoxerEnd(true); PopBox("This Account number is already assign to another customer, please choose another one");
             }
+        }).catch((e) => MutationError(e.toString()));
+    }
+
+    const GenerateSupplierAccountNumber = () => {
+
+        let u = userinfo.loginAccount.username; // username getter
+        let j = userinfo.loginAccount.token; // token getter
+
+        nextClickSet(true);
+
+        generateaccountnumbermut({ variables: { username: u, jwtauth: j } }).then(({ data }) => {
+            nextClickSet(false);
+            document.getElementById("supplieraccountnoid").value = data.generateaccountnumber.newaccountnumber;
+        }).catch((e) => MutationError(e.toString()));
+    }
+
+    const GenerateCustomerAccountNumber = () => {
+
+        let u = userinfo.loginAccount.username; // username getter
+        let j = userinfo.loginAccount.token; // token getter
+
+        nextClickSet(true);
+
+        generateaccountnumbermut({ variables: { username: u, jwtauth: j } }).then(({ data }) => {
+            nextClickSet(false);
+            document.getElementById("customeraccountnoid").value = data.generateaccountnumber.newaccountnumber;
         }).catch((e) => MutationError(e.toString()));
     }
 
@@ -215,12 +250,14 @@ function Transaction(props) {
                     <TextField
                         id="supplieraccountnoid" placeholder="Supplier Account No" fullWidth={true}
                         margin="normal" variant="outlined" defaultValue={props.supplieraccountno !== undefined ? props.supplieraccountno : ""} />
+                    <p className="accountnumbergenerator" onClick={() => GenerateSupplierAccountNumber()}>Generate A.N</p>
                     <TextField
                         id="customerid" placeholder="Customer Name" fullWidth={true}
                         margin="normal" variant="outlined" defaultValue={props.customername !== undefined ? props.customername : ""} />
                     <TextField
                         id="customeraccountnoid" placeholder="Customer Account No" fullWidth={true}
                         margin="normal" variant="outlined" defaultValue={props.customeraccountno !== undefined ? props.customeraccountno : ""} />
+                    <p className="accountnumbergenerator" onClick={() => GenerateCustomerAccountNumber()}>Generate A.N</p>
                     <TextField
                         id="rate2id" label="Customer Rate" fullWidth={true}
                         margin="normal" variant="outlined" onChange={() => NGN2Func()} />
