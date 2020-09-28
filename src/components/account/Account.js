@@ -282,8 +282,8 @@ function Account() {
                                         <Tab label="Expenses List" {...a11yProps(5)} />
                                         <Tab label="Add Bank" {...a11yProps(6)} />
                                         <Tab label="Bank List" {...a11yProps(7)} />
-                                        <Tab label="Opening Balance" {...a11yProps(8)} />
-                                        <Tab label="Opening Balance List" {...a11yProps(9)} />
+                                        <Tab label="Add Supplier/Customer" {...a11yProps(8)} />
+                                        <Tab label="Supplier/Customer List" {...a11yProps(9)} />
                                         {accessv.data.accessverify.createdby === "no" ?
                                         <Tab label="Access Control" {...a11yProps(10)} />
                                         : ""}

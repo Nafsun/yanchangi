@@ -3685,11 +3685,18 @@ a:hover{
     text-align: center;
 }
 .accountnumbergenerator{
-    text-align: right;
     font-size:14px;
     font-family: sans-serif;
     color: rgb(107, 43, 8);
     margin-top:0px;
     margin-bottom: -5px;
     cursor: pointer;
+    border-radius: 5px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(107, 43, 8);
+    padding: 8px;
+    margin-right:30%;
+    margin-left:30%;
+    text-align: center;
 }

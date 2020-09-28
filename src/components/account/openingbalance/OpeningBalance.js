@@ -35,10 +35,19 @@ const GETPREVIOUSUSERSINFO = gql`
     }
 `;
 
+const GENERATEACCOUNTNUMBER = gql`
+    mutation generateaccountnumber($username: String, $jwtauth: String){
+        generateaccountnumber(username: $username, jwtauth: $jwtauth){
+            newaccountnumber, error
+        }
+    }
+`;
+
 function OpeningBalance(props) {
 
     const userinfo = JSON.parse(localStorage.getItem("userinfo"));
     const [openingbalanceinsertmut] = useMutation(OPENINGBALANCEINSERT);
+    const [generateaccountnumbermut] = useMutation(GENERATEACCOUNTNUMBER);
     const [nextClickGet, nextClickSet] = useState(false);
     const [PopBoxerStart, PopBoxerEnd] = useState(false);
     const [PopBoxTextGet, PopBoxTextSet] = useState(null);
@@ -73,7 +82,7 @@ function OpeningBalance(props) {
 
         if (amount === "") { PopBoxerEnd(true); PopBox("Amount cannot be empty"); return false; }
         if (name === "") { PopBoxerEnd(true); PopBox("Name cannot be empty"); return false; }
-        if (accountnumber === "") { PopBoxerEnd(true); PopBox("Account Number cannot be empty"); return false; }
+        if (accountnumber === "") { PopBoxerEnd(true); PopBox("Please Generate an Account Number for your client"); return false; }
 
         let u = userinfo.loginAccount.username; // username getter
         let j = userinfo.loginAccount.token; // token getter
@@ -94,6 +103,10 @@ function OpeningBalance(props) {
                 if (props.totalityrefetch !== undefined) {
                     props.totalityrefetch();
                 }
+            } else if (data.openingbalanceinsert.error === "supplieraccountnotaken") {
+                PopBoxerEnd(true); PopBox("This Account number is already assign to another supplier, please choose another one");
+            } else if (data.openingbalanceinsert.error === "customeraccountnotaken") {
+                PopBoxerEnd(true); PopBox("This Account number is already assign to another customer, please choose another one");
             }
         }).catch((e) => MutationError(e.toString()));
     }
@@ -126,6 +139,19 @@ function OpeningBalance(props) {
             }
         }
     }
+    
+    const GenerateAccountNumber = () => {
+
+        let u = userinfo.loginAccount.username; // username getter
+        let j = userinfo.loginAccount.token; // token getter
+
+        nextClickSet(true);
+
+        generateaccountnumbermut({ variables: { username: u, jwtauth: j } }).then(({ data }) => {
+            nextClickSet(false);
+            document.getElementById("accountnumberid").value = data.generateaccountnumber.newaccountnumber;
+        }).catch((e) => MutationError(e.toString()));
+    }
 
     return (
         <div id="scrolldown" className="scrollpost">
@@ -142,8 +168,8 @@ function OpeningBalance(props) {
                         </TextField>
                     }
                     <TextField
-                        id="amountid" label="Amount" fullWidth={true}
-                        margin="normal" onChange={() => NumberCheck("amountid")} />
+                        id="amountid" label="Balance" fullWidth={true}
+                        margin="normal" variant="outlined" onChange={() => NumberCheck("amountid")} />
                     <FormControl component="fieldset">
                         <RadioGroup aria-label="chooseclient" name="chooseclient" value={chooseclientGet} onChange={(e) => chooseclientChanger(e)}>
                             <FormControlLabel value="supplier" control={<Radio />} label="Supplier" style={{ color: "rgb(107, 43, 8)" }} />
@@ -152,10 +178,11 @@ function OpeningBalance(props) {
                     </FormControl>
                     <TextField
                         id="nameid" placeholder="Name" fullWidth={true}
-                        margin="normal" defaultValue={props.name !== undefined ? props.name : ""} />
+                        margin="normal" variant="outlined" defaultValue={props.name !== undefined ? props.name : ""} />
                     <TextField
                         id="accountnumberid" placeholder="Account No" fullWidth={true} defaultValue={props.accountno !== undefined ? props.accountno : ""}
-                        margin="normal" onChange={() => NumberCheck("accountnumberid")} />
+                        margin="normal" variant="outlined" onChange={() => NumberCheck("accountnumberid")} disabled />
+                    <p className="accountnumbergenerator" onClick={() => GenerateAccountNumber()}>Generate Account Number</p>
                     <br />
                     <Button
                         fullWidth={true}

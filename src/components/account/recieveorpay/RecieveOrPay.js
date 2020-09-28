@@ -130,6 +130,14 @@ function RecieveOrPay(props) {
                 if(props.refetchtotal !== undefined){
                     props.refetchtotal();
                 }
+            }else if (data.recieveorpayinsert.error === "supplieraccountnodoesmatch") {
+                PopBoxerEnd(true); PopBox("The supplier account number does not match the name");
+            }else if (data.recieveorpayinsert.error === "customeraccountnodoesmatch") {
+                PopBoxerEnd(true); PopBox("The customer account number does not match the name");
+            }else if (data.recieveorpayinsert.error === "supplieraccountnodontexist") {
+                PopBoxerEnd(true); PopBox("Supplier Account number does not exist, please add the supplier to the 'ADD SUPPLIER/CUSTOMER' section");
+            }else if (data.recieveorpayinsert.error === "customeraccountnodontexist") {
+                PopBoxerEnd(true); PopBox("Customer Account number does not exist, please add the customer to the 'ADD SUPPLIER/CUSTOMER' section");
             }
         }).catch((e) => MutationError(e.toString()));
     }

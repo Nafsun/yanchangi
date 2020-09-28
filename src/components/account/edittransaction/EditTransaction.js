@@ -233,13 +233,17 @@ function EditTransaction(props) {
                 if (props.refetcher !== undefined) {
                     props.refetcher();
                 }
-            } else if (data.buyandsellupdate.error === "supplieraccountnotaken") {
-                PopBoxerEnd(true); PopBox("This Account number is already assign to another supplier, please choose another one");
-            } else if (data.buyandsellupdate.error === "customeraccountnotaken") {
-                PopBoxerEnd(true); PopBox("This Account number is already assign to another customer, please choose another one");
+            }else if (data.buyandsellupdate.error === "supplieraccountnodoesmatch") {
+                PopBoxerEnd(true); PopBox("The supplier account number does not match the name");
+            }else if (data.buyandsellupdate.error === "customeraccountnodoesmatch") {
+                PopBoxerEnd(true); PopBox("The customer account number does not match the name");
+            }else if (data.buyandsellupdate.error === "supplieraccountnodontexist") {
+                PopBoxerEnd(true); PopBox("Supplier Account number does not exist, please add the supplier to the 'ADD SUPPLIER/CUSTOMER' section");
+            }else if (data.buyandsellupdate.error === "customeraccountnodontexist") {
+                PopBoxerEnd(true); PopBox("Customer Account number does not exist, please add the customer to the 'ADD SUPPLIER/CUSTOMER' section");
             }
         }).catch((e) => {
-            MutationError(e.toString())
+            MutationError(e.toString());
         });
     }
 
@@ -359,7 +363,7 @@ function EditTransaction(props) {
                         }
 
                         {data.buyandsellget.length === 0 && starter2 === 0 && nextClickGet === false && nextClickGet2 === false && searchGet === "" ? <p align="center" className="datef">You have not buy or sell any currency yet</p> : ""}
-                        {data.buyandsellget.length === 0 && starter2 === 0 && nextClickGet === false && searchGet !== "" ? <p align="center" className="datef">No client with that name exist</p> : ""}
+                        {data.buyandsellget.length === 0 && starter2 === 0 && nextClickGet === false && searchGet !== "" ? <p align="center" className="datef">No client with that name exist in the transaction list</p> : ""}
                         {data.buyandsellget.length === 0 && starter2 > 0 ? <p align="center" className="datef">No More Transactions</p> : ""}
                         {starter2 === 0 ? "" : <p onClick={() => PreviousBroadcast()} className="leftNav"><ArrowBack /></p>}
                         {data.buyandsellget.length === 0 ? "" : <p onClick={() => NextBroadcast()} className="rightNav"><ArrowForward /></p>}

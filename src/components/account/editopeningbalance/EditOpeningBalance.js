@@ -244,6 +244,10 @@ function EditOpeningBalance(props) {
                 if (props.totalityrefetch !== undefined) {
                     props.totalityrefetch();
                 }
+            } else if (data.openingbalanceupdate.error === "supplieraccountnotaken") {
+                PopBoxerEnd(true); PopBox("This Account number is already assign to another supplier, please choose another one");
+            } else if (data.openingbalanceupdate.error === "customeraccountnotaken") {
+                PopBoxerEnd(true); PopBox("This Account number is already assign to another customer, please choose another one");
             }
         }).catch((e) => MutationError(e.toString()));
     }
@@ -331,7 +335,7 @@ function EditOpeningBalance(props) {
                                             <p className="describtionjobcontainer01"><span>Name:</span> {t.name}</p>
                                             <p className="describtionjobcontainer01"><span>Client:</span> {t.chooseclient}</p>
                                             <p className="describtionjobcontainer01"><span>Account No:</span> {t.accountnumber}</p>
-                                            <p className="describtionjobcontainer01"><span>Amount:</span> {Naira(t.amount)}</p>
+                                            <p className="describtionjobcontainer01"><span>Balance:</span> {Naira(t.amount)}</p>
                                             <div className="changefloat2"></div>
                                             <p className="timejobcontainer01">{t.date}</p>
                                         </CardContent>
@@ -363,7 +367,7 @@ function EditOpeningBalance(props) {
                                 <div className="menudesign4">
                                     <ThemeProvider theme={theme}>
                                         <TextField
-                                            id="amountid" label="Amount" fullWidth={true} defaultValue={amountGet}
+                                            id="amountid" label="Balance" fullWidth={true} defaultValue={amountGet}
                                             margin="normal" onChange={() => NumberCheck("amountid")} />
                                         <FormControl component="fieldset">
                                             <RadioGroup aria-label="chooseclient" name="chooseclient" value={chooseclientGet} onChange={(e) => chooseclientChanger(e)}>

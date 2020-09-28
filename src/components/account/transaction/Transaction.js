@@ -31,19 +31,10 @@ const GETPREVIOUSUSERSINFO = gql`
     }
 `;
 
-const GENERATEACCOUNTNUMBER = gql`
-    mutation generateaccountnumber($username: String, $jwtauth: String){
-        generateaccountnumber(username: $username, jwtauth: $jwtauth){
-            newaccountnumber, error
-        }
-    }
-`;
-
 function Transaction(props) {
 
     const userinfo = JSON.parse(localStorage.getItem("userinfo"));
     const [buyandsellinsertmut] = useMutation(BUYANDSELLINSERT);
-    const [generateaccountnumbermut] = useMutation(GENERATEACCOUNTNUMBER);
     const [nextClickGet, nextClickSet] = useState(false);
     const [PopBoxerStart, PopBoxerEnd] = useState(false);
     const [PopBoxTextGet, PopBoxTextSet] = useState(null);
@@ -113,37 +104,15 @@ function Transaction(props) {
                 if(props.refetchtotal !== undefined){
                     props.refetchtotal();
                 }
-            }else if (data.buyandsellinsert.error === "supplieraccountnotaken") {
-                PopBoxerEnd(true); PopBox("This Account number is already assign to another supplier, please choose another one");
-            }else if (data.buyandsellinsert.error === "customeraccountnotaken") {
-                PopBoxerEnd(true); PopBox("This Account number is already assign to another customer, please choose another one");
+            }else if (data.buyandsellinsert.error === "supplieraccountnodoesmatch") {
+                PopBoxerEnd(true); PopBox("The supplier account number does not match the name");
+            }else if (data.buyandsellinsert.error === "customeraccountnodoesmatch") {
+                PopBoxerEnd(true); PopBox("The customer account number does not match the name");
+            }else if (data.buyandsellinsert.error === "supplieraccountnodontexist") {
+                PopBoxerEnd(true); PopBox("Supplier Account number does not exist, please add the supplier to the 'ADD SUPPLIER/CUSTOMER' section");
+            }else if (data.buyandsellinsert.error === "customeraccountnodontexist") {
+                PopBoxerEnd(true); PopBox("Customer Account number does not exist, please add the customer to the 'ADD SUPPLIER/CUSTOMER' section");
             }
-        }).catch((e) => MutationError(e.toString()));
-    }
-
-    const GenerateSupplierAccountNumber = () => {
-
-        let u = userinfo.loginAccount.username; // username getter
-        let j = userinfo.loginAccount.token; // token getter
-
-        nextClickSet(true);
-
-        generateaccountnumbermut({ variables: { username: u, jwtauth: j } }).then(({ data }) => {
-            nextClickSet(false);
-            document.getElementById("supplieraccountnoid").value = data.generateaccountnumber.newaccountnumber;
-        }).catch((e) => MutationError(e.toString()));
-    }
-
-    const GenerateCustomerAccountNumber = () => {
-
-        let u = userinfo.loginAccount.username; // username getter
-        let j = userinfo.loginAccount.token; // token getter
-
-        nextClickSet(true);
-
-        generateaccountnumbermut({ variables: { username: u, jwtauth: j } }).then(({ data }) => {
-            nextClickSet(false);
-            document.getElementById("customeraccountnoid").value = data.generateaccountnumber.newaccountnumber;
         }).catch((e) => MutationError(e.toString()));
     }
 
@@ -250,14 +219,12 @@ function Transaction(props) {
                     <TextField
                         id="supplieraccountnoid" placeholder="Supplier Account No" fullWidth={true}
                         margin="normal" variant="outlined" defaultValue={props.supplieraccountno !== undefined ? props.supplieraccountno : ""} />
-                    <p className="accountnumbergenerator" onClick={() => GenerateSupplierAccountNumber()}>Generate S.A.N</p>
                     <TextField
                         id="customerid" placeholder="Customer Name" fullWidth={true}
                         margin="normal" variant="outlined" defaultValue={props.customername !== undefined ? props.customername : ""} />
                     <TextField
                         id="customeraccountnoid" placeholder="Customer Account No" fullWidth={true}
                         margin="normal" variant="outlined" defaultValue={props.customeraccountno !== undefined ? props.customeraccountno : ""} />
-                    <p className="accountnumbergenerator" onClick={() => GenerateCustomerAccountNumber()}>Generate C.A.N</p>
                     <TextField
                         id="rate2id" label="Customer Rate" fullWidth={true}
                         margin="normal" variant="outlined" onChange={() => NGN2Func()} />

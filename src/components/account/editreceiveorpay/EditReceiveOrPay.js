@@ -247,6 +247,14 @@ function EditReceiveOrPay(props) {
                 if (props.refetcher !== undefined) {
                     props.refetcher();
                 }
+            }else if (data.recieveorpayupdate.error === "supplieraccountnodoesmatch") {
+                PopBoxerEnd(true); PopBox("The supplier account number does not match the name");
+            }else if (data.recieveorpayupdate.error === "customeraccountnodoesmatch") {
+                PopBoxerEnd(true); PopBox("The customer account number does not match the name");
+            }else if (data.recieveorpayupdate.error === "supplieraccountnodontexist") {
+                PopBoxerEnd(true); PopBox("Supplier Account number does not exist, please add the supplier to the 'ADD SUPPLIER/CUSTOMER' section");
+            }else if (data.recieveorpayupdate.error === "customeraccountnodontexist") {
+                PopBoxerEnd(true); PopBox("Customer Account number does not exist, please add the customer to the 'ADD SUPPLIER/CUSTOMER' section");
             }
         }).catch((e) => {
             MutationError(e.toString())
@@ -313,8 +321,8 @@ function EditReceiveOrPay(props) {
                             )
                         }
 
-                        {data.recieveorpayget.length === 0 && starter2 === 0 && nextClickGet === false && nextClickGet2 === false && searchGet === "" ? <p align="center" className="datef">You have not make any transfer or recieved transaction yet</p> : ""}
-                        {data.recieveorpayget.length === 0 && starter2 === 0 && nextClickGet === false && searchGet !== "" ? <p align="center" className="datef">No client with that name exist</p> : ""}
+                        {data.recieveorpayget.length === 0 && starter2 === 0 && nextClickGet === false && nextClickGet2 === false && searchGet === "" ? <p align="center" className="datef">You have not make any payment or recieved transaction yet</p> : ""}
+                        {data.recieveorpayget.length === 0 && starter2 === 0 && nextClickGet === false && searchGet !== "" ? <p align="center" className="datef">No client with that name exist in the recieved/pay list</p> : ""}
                         {data.recieveorpayget.length === 0 && starter2 > 0 ? <p align="center" className="datef">No More Transfer or Recieved Transaction</p> : ""}
                         {starter2 === 0 ? "" : <p onClick={() => PreviousBroadcast()} className="leftNav"><ArrowBack /></p>}
                         {data.recieveorpayget.length === 0 ? "" : <p onClick={() => NextBroadcast()} className="rightNav"><ArrowForward /></p>}
