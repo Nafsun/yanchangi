@@ -13,7 +13,6 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import Help from '@material-ui/icons/Help';
 import Helps from '../help/Help';
 import ForgotPassword from '../forgotpassword/ForgotPassword';
-import Subscription from '../subscription/Subscription';
 import VerifyEmail from '../verifyemail/VerifyEmail';
 import ListofCustomers from '../listofcustomers/ListofCustomers';
 import ListofSuppliers from '../listofsuppliers/ListofSuppliers';
@@ -161,7 +160,6 @@ function BottomRoute() {
             <Route path="/feedback" exact component={FeedBacks} />
             <Route path="/help" exact component={Helps} />
             <Route path="/forgotpassword" exact component={ForgotPassword} />
-            <Route path="/subscription" exact component={Subscription} />
             <Route path="/verifyemail" exact component={VerifyEmail} />
             <Route path="/listofcustomers" exact component={ListofCustomers} />
             <Route path="/listofsuppliers" exact component={ListofSuppliers} />
