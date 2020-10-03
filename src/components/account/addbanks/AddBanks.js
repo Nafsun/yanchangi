@@ -94,6 +94,12 @@ function AddBanks(props) {
                         <MenuItem value="Sterling Bank">Sterling Bank</MenuItem>
                         <MenuItem value="Wema Bank">Wema Bank</MenuItem>
                         <MenuItem value="Zenith Bank">Zenith Bank</MenuItem>
+                        <MenuItem value="Taj Bank">Taj Bank</MenuItem>
+                        <MenuItem value="SunTrust Bank">SunTrust Bank</MenuItem>
+                        <MenuItem value="Providus Bank">Providus Bank</MenuItem>
+                        <MenuItem value="Jaiz Bank">Jaiz Bank</MenuItem>
+                        <MenuItem value="Standard Chartered Bank">Standard Chartered Bank</MenuItem>
+                        <MenuItem value="Titan Trust Bank">Titan Trust Bank</MenuItem>
                     </TextField>
                     <TextField
                         id="bankaccountnumberid" label="Bank Account Number" fullWidth={true}
