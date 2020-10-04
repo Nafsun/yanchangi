@@ -1,5 +1,5 @@
 runtime: nodejs12
-service: yanchangi
+service: default
 handlers:
     # Serve all static files with urls ending with a file extension
     - url: /(.*\..+)$
