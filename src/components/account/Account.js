@@ -391,7 +391,7 @@ function Account() {
                                 }
                                 {accessv.data.accessverify.createreconcile === "yes" ?
                                     <TabPanel value={value} index={10}> 
-                                        <Reconcile refetch={refetch} />
+                                        <Reconcile refetcher={totals.refetch} refetch={refetch} />
                                     </TabPanel>
                                     :
                                     <TabPanel value={value} index={10}>
@@ -400,7 +400,7 @@ function Account() {
                                 }
                                 {accessv.data.accessverify.editreconcile === "yes" || accessv.data.accessverify.deletereconcile === "yes" ?
                                     <TabPanel value={value} index={11}>
-                                        <EditReconcile refetch={refetch} />
+                                        <EditReconcile refetcher={totals.refetch} refetch={refetch} />
                                     </TabPanel>
                                     :
                                     <TabPanel value={value} index={11}>

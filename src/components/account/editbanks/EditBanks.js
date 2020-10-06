@@ -300,10 +300,10 @@ function EditBanks(props) {
                                         </TextField>
                                         <TextField
                                             id="bankaccountnumberid" label="Bank Account Number" fullWidth={true} defaultValue={bankaccountnumberGet}
-                                            margin="normal" variant="outlined" onChange={() => NumberCheck("bankaccountnumberid")} />
+                                            margin="normal" variant="outlined" onChange={() => NumberCheck("bankaccountnumberid")} disabled />
                                         <TextField
                                             id="bankaccountnameid" label="Bank Account Name" fullWidth={true}
-                                            margin="normal" variant="outlined" defaultValue={bankaccountnameGet} />
+                                            margin="normal" variant="outlined" defaultValue={bankaccountnameGet} disabled />
                                         <TextField
                                             id="bankamountid" label="Bank Balance" fullWidth={true} defaultValue={bankamountGet}
                                             margin="normal" onChange={() => NumberCheck("bankamountid")} />

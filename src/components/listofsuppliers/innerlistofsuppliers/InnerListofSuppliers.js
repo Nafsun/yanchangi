@@ -10,11 +10,12 @@ import Grid from '@material-ui/core/Grid';
 import { ThemeProvider } from '@material-ui/core/styles';
 import theme from '../../functions/theme';
 import TextField from '@material-ui/core/TextField';
+import Naira from '../../functions/naira';
 
 const GETALLSUPPLIERS = gql` 
     query getallsuppliers($username: String, $jwtauth: String, $searchsupplier: String, $searchsupplieraccountno: String, $start: Int, $end: Int){
         getallsuppliers(username: $username, jwtauth: $jwtauth, searchsupplier: $searchsupplier, searchsupplieraccountno: $searchsupplieraccountno, start: $start, end: $end){
-            id, supplier, supplieraccountno, error
+            id, supplier, supplieraccountno, balance, error
         }
     }
 `;
@@ -125,28 +126,38 @@ function InnerListofSuppliers() {
 
             {(data.getallsuppliers.length === 0 && startcountf > 0) || (data.getallsuppliers.length === 0 && startcountf === 0 && nextClickGet === false) ? "" :
                 <Grid container direction="row" justify="center" alignItems="center" spacing={1}>
-                    <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                    <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
                         <div className="fnotify2">
                             <p align="center" className="usernamefollowers">Name</p>
                         </div>
                     </Grid>
-                    <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                    <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
                         <div className="fnotify2">
                             <p align="center" className="usernamefollowers">Account No</p>
+                        </div>
+                    </Grid>
+                    <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
+                        <div className="fnotify2">
+                            <p align="center" className="usernamefollowers">Balance</p>
                         </div>
                     </Grid>
                 </Grid>
             }
             {data.getallsuppliers.map((a) => (
                 <Grid key={a.id} container direction="row" justify="center" alignItems="center" spacing={1}>
-                    <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                    <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
                         <div onClick={() => SupplierCheck(a.supplier, a.supplieraccountno)} className="fnotify">
                             <p align="center" className="usernamefollowers2">{a.supplier}</p>
                         </div>
                     </Grid>
-                    <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                    <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
                         <div onClick={() => SupplierCheck(a.supplier, a.supplieraccountno)} className="fnotify">
                             <p align="center" className="usernamefollowers2">{a.supplieraccountno}</p>
+                        </div>
+                    </Grid>
+                    <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
+                        <div onClick={() => SupplierCheck(a.supplier, a.supplieraccountno)} className="fnotify">
+                            <p align="center" className="usernamefollowers2">{Naira(a.balance)}</p>
                         </div>
                     </Grid>
                 </Grid>
