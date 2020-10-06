@@ -36,6 +36,8 @@ import Expenses from './expenses/Expenses';
 import EditExpenses from './editexpenses/EditExpenses';
 import OpeningBalance from './openingbalance/OpeningBalance';
 import EditOpeningBalance from './editopeningbalance/EditOpeningBalance';
+import Reconcile from './reconcile/Reconcile';
+import EditReconcile from './editreconcile/EditReconcile';
 
 const ACCOUNTINFO = gql`
     query accountInfo($username: String, $jwtauth: String){
@@ -65,7 +67,7 @@ const TOTALTRANSACTIONS = gql`
 const ACCESSVERIFY = gql`
     query accessverify($username: String, $jwtauth: String){
         accessverify(username: $username, jwtauth: $jwtauth){
-            username, createdby, createbank, editbank, deletebank, createtransaction, edittransaction, deletetransaction, createrecieveorpay, editrecieveorpay, deleterecieveorpay, createexpense, editexpense, deleteexpense, createopeningbalance, editopeningbalance, deleteopeningbalance
+            username, createdby, createbank, editbank, deletebank, createtransaction, edittransaction, deletetransaction, createrecieveorpay, editrecieveorpay, deleterecieveorpay, createexpense, editexpense, deleteexpense, createopeningbalance, editopeningbalance, deleteopeningbalance, createreconcile, editreconcile, deletereconcile
         }
     }
 `;
@@ -284,14 +286,16 @@ function Account() {
                                         <Tab label="Bank List" {...a11yProps(7)} />
                                         <Tab label="Add Supplier/Customer" {...a11yProps(8)} />
                                         <Tab label="Supplier/Customer List" {...a11yProps(9)} />
+                                        <Tab label="Reconcile" {...a11yProps(10)} />
+                                        <Tab label="Reconcile List" {...a11yProps(11)} />
                                         {accessv.data.accessverify.createdby === "no" ?
-                                        <Tab label="Access Control" {...a11yProps(10)} />
+                                        <Tab label="Access Control" {...a11yProps(12)} />
                                         : ""}
                                         {accessv.data.accessverify.createdby === "no" ?
-                                        <Tab label="Edit Access Control" {...a11yProps(11)} />
+                                        <Tab label="Edit Access Control" {...a11yProps(13)} />
                                         : ""}
                                         {accessv.data.accessverify.createdby === "no" ?
-                                        <Tab label="Edit Profile" {...a11yProps(12)} />
+                                        <Tab label="Edit Profile" {...a11yProps(14)} />
                                         : ""}
                                     </Tabs>
                                 </AppBar>
@@ -385,30 +389,48 @@ function Account() {
                                         <p className="donthaveaccess">You don't have access to this section</p>
                                     </TabPanel>
                                 }
-                                {accessv.data.accessverify.createdby === "no" ?
+                                {accessv.data.accessverify.createreconcile === "yes" ?
+                                    <TabPanel value={value} index={10}> 
+                                        <Reconcile refetch={refetch} />
+                                    </TabPanel>
+                                    :
                                     <TabPanel value={value} index={10}>
+                                        <p className="donthaveaccess">You don't have access to this section</p>
+                                    </TabPanel>
+                                }
+                                {accessv.data.accessverify.editreconcile === "yes" || accessv.data.accessverify.deletereconcile === "yes" ?
+                                    <TabPanel value={value} index={11}>
+                                        <EditReconcile refetch={refetch} />
+                                    </TabPanel>
+                                    :
+                                    <TabPanel value={value} index={11}>
+                                        <p className="donthaveaccess">You don't have access to this section</p>
+                                    </TabPanel>
+                                }
+                                {accessv.data.accessverify.createdby === "no" ?
+                                    <TabPanel value={value} index={12}>
                                         <AccessControl />
                                     </TabPanel>
                                 :
-                                    <TabPanel value={value} index={10}>
+                                    <TabPanel value={value} index={12}>
                                         <p className="donthaveaccess">You don't have access to this section</p>
                                     </TabPanel>
                                 }
                                 {accessv.data.accessverify.createdby === "no" ?
-                                    <TabPanel value={value} index={11}>
+                                    <TabPanel value={value} index={13}>
                                         <EditAccessControl />
                                     </TabPanel>
                                 :
-                                    <TabPanel value={value} index={11}>
+                                    <TabPanel value={value} index={13}>
                                         <p className="donthaveaccess">You don't have access to this section</p>
                                     </TabPanel>
                                 }
                                 {accessv.data.accessverify.createdby === "no" ?
-                                    <TabPanel value={value} index={12}>
+                                    <TabPanel value={value} index={14}>
                                         <Edits refetch={refetch} />
                                     </TabPanel>
                                 :
-                                    <TabPanel value={value} index={12}>
+                                    <TabPanel value={value} index={14}>
                                         <p className="donthaveaccess">You don't have access to this section</p>
                                     </TabPanel>
                                 }

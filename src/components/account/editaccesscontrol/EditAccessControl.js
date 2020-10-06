@@ -26,7 +26,7 @@ import UsernameValidateCheck from '../../functions/usernamevalidatecheck';
 const EXISTINGUSERS = gql`
     query existingusers($username: String, $jwtauth: String){
         existingusers(username: $username, jwtauth: $jwtauth){
-            id, username, createbank, editbank, deletebank, createtransaction, edittransaction, deletetransaction, createrecieveorpay, editrecieveorpay, deleterecieveorpay, createexpense, editexpense, deleteexpense, createopeningbalance, editopeningbalance, deleteopeningbalance
+            id, username, createbank, editbank, deletebank, createtransaction, edittransaction, deletetransaction, createrecieveorpay, editrecieveorpay, deleterecieveorpay, createexpense, editexpense, deleteexpense, createopeningbalance, editopeningbalance, deleteopeningbalance, createreconcile, editreconcile, deletereconcile
         }
     }
 `;
@@ -42,8 +42,8 @@ const EXISTINGUSERSDELETE = gql`
 
 //Existing users update
 const EXISTINGUSERSUPDATE = gql`
-    mutation existingusersupdate($id: String, $username: String, $newusername: String, $newpassword: String, $createbank: String, $editbank: String, $deletebank: String, $createtransaction: String, $edittransaction: String, $deletetransaction: String, $createrecieveorpay: String, $editrecieveorpay: String, $deleterecieveorpay: String, $createexpense: String, $editexpense: String, $deleteexpense: String, $createopeningbalance: String, $editopeningbalance: String, $deleteopeningbalance: String, $jwtauth: String){
-        existingusersupdate(id: $id, username: $username, newusername: $newusername, newpassword: $newpassword, createbank: $createbank, editbank: $editbank, deletebank: $deletebank, createtransaction: $createtransaction, edittransaction: $edittransaction, deletetransaction: $deletetransaction, createrecieveorpay: $createrecieveorpay, editrecieveorpay: $editrecieveorpay, deleterecieveorpay: $deleterecieveorpay, createexpense: $createexpense, editexpense: $editexpense, deleteexpense: $deleteexpense, createopeningbalance: $createopeningbalance, editopeningbalance: $editopeningbalance, deleteopeningbalance: $deleteopeningbalance, jwtauth: $jwtauth){
+    mutation existingusersupdate($id: String, $username: String, $newusername: String, $newpassword: String, $createbank: String, $editbank: String, $deletebank: String, $createtransaction: String, $edittransaction: String, $deletetransaction: String, $createrecieveorpay: String, $editrecieveorpay: String, $deleterecieveorpay: String, $createexpense: String, $editexpense: String, $deleteexpense: String, $createopeningbalance: String, $editopeningbalance: String, $deleteopeningbalance: String, $createreconcile: String, $editreconcile: String, $deletereconcile: String, $jwtauth: String){
+        existingusersupdate(id: $id, username: $username, newusername: $newusername, newpassword: $newpassword, createbank: $createbank, editbank: $editbank, deletebank: $deletebank, createtransaction: $createtransaction, edittransaction: $edittransaction, deletetransaction: $deletetransaction, createrecieveorpay: $createrecieveorpay, editrecieveorpay: $editrecieveorpay, deleterecieveorpay: $deleterecieveorpay, createexpense: $createexpense, editexpense: $editexpense, deleteexpense: $deleteexpense, createopeningbalance: $createopeningbalance, editopeningbalance: $editopeningbalance, deleteopeningbalance: $deleteopeningbalance, createreconcile: $createreconcile, editreconcile: $editreconcile, deletereconcile: $deletereconcile, jwtauth: $jwtauth){
             error
         }
     }
@@ -77,6 +77,9 @@ function EditAccessControl(props) {
     const [CreateOpeningBalanceGet, CreateOpeningBalanceSet] = useState("no");
     const [EditOpeningBalanceGet, EditOpeningBalanceSet] = useState("no");
     const [DeleteOpeningBalanceGet, DeleteOpeningBalanceSet] = useState("no");
+    const [CreateReconcileGet, CreateReconcileSet] = useState("no");
+    const [EditReconcileGet, EditReconcileSet] = useState("no");
+    const [DeleteReconcileGet, DeleteReconcileSet] = useState("no");
 
     const [deleteidGet, deleteidSet] = useState(null);
     const [deleteGetter, deleteSetter] = useState(false);
@@ -139,12 +142,13 @@ function EditAccessControl(props) {
         PopBoxerEnd(false);
     }
 
-    const OpenEdit = (id, username, createbank, editbank, deletebank, createtransaction, edittransaction, deletetransaction, createrecieveorpay, editrecieveorpay, deleterecieveorpay, createexpense, editexpense, deleteexpense, createopeningbalance, editopeningbalance, deleteopeningbalance) => {
+    const OpenEdit = (id, username, createbank, editbank, deletebank, createtransaction, edittransaction, deletetransaction, createrecieveorpay, editrecieveorpay, deleterecieveorpay, createexpense, editexpense, deleteexpense, createopeningbalance, editopeningbalance, deleteopeningbalance, createreconcile, editreconcile, deletereconcile) => {
         idSet(id); usernameSet(username); CreateBankSet(createbank); EditBankSet(editbank); DeleteBankSet(deletebank); CreateTransactionSet(createtransaction);
         EditTransactionSet(edittransaction); DeleteTransactionSet(deletetransaction); CreateRecieveorpaySet(createrecieveorpay); EditRecieveorpaySet(editrecieveorpay);
         DeleteRecieveorpaySet(deleterecieveorpay); CreateExpenseSet(createexpense); EditExpenseSet(editexpense);
         DeleteExpenseSet(deleteexpense); CreateOpeningBalanceSet(createopeningbalance); EditOpeningBalanceSet(editopeningbalance);
-        DeleteOpeningBalanceSet(deleteopeningbalance); 
+        DeleteOpeningBalanceSet(deleteopeningbalance); CreateReconcileSet(createreconcile); EditReconcileSet(editreconcile);
+        DeleteReconcileSet(deletereconcile); 
         editSet(true);
     }
 
@@ -166,7 +170,7 @@ function EditAccessControl(props) {
 
         nextClickSet(true);
 
-        existingusersupdatemutation({ variables: { id: idGet, username: u, newusername, newpassword, createbank: CreateBankGet, editbank: EditBankGet, deletebank: DeleteBankGet, createtransaction: CreateTransactionGet, edittransaction: EditTransactionGet, deletetransaction: DeleteTransactionGet, createrecieveorpay: CreateRecieveorpayGet, editrecieveorpay: EditRecieveorpayGet, deleterecieveorpay: DeleteRecieveorpayGet, createexpense: CreateExpenseGet, editexpense: EditExpenseGet, deleteexpense: DeleteExpenseGet, createopeningbalance: CreateOpeningBalanceGet, editopeningbalance: EditOpeningBalanceGet, deleteopeningbalance: DeleteOpeningBalanceGet, jwtauth: j } }).then(({ data }) => {
+        existingusersupdatemutation({ variables: { id: idGet, username: u, newusername, newpassword, createbank: CreateBankGet, editbank: EditBankGet, deletebank: DeleteBankGet, createtransaction: CreateTransactionGet, edittransaction: EditTransactionGet, deletetransaction: DeleteTransactionGet, createrecieveorpay: CreateRecieveorpayGet, editrecieveorpay: EditRecieveorpayGet, deleterecieveorpay: DeleteRecieveorpayGet, createexpense: CreateExpenseGet, editexpense: EditExpenseGet, deleteexpense: DeleteExpenseGet, createopeningbalance: CreateOpeningBalanceGet, editopeningbalance: EditOpeningBalanceGet, deleteopeningbalance: DeleteOpeningBalanceGet, createreconcile: CreateReconcileGet, editreconcile: EditReconcileGet, deletereconcile: DeleteReconcileGet, jwtauth: j } }).then(({ data }) => {
             nextClickSet(false);
             editSet(false);
             if (data.existingusersupdate.error === "no") {
@@ -304,6 +308,30 @@ function EditAccessControl(props) {
         }
     }
 
+    const CreateReconcileFunc = (event) => {
+        if (event.target.checked === true) {
+            CreateReconcileSet("yes");
+        } else {
+            CreateReconcileSet("no");
+        }
+    }
+
+    const EditReconcileFunc = (event) => {
+        if (event.target.checked === true) {
+            EditReconcileSet("yes");
+        } else {
+            EditReconcileSet("no");
+        }
+    }
+
+    const DeleteReconcileFunc = (event) => {
+        if (event.target.checked === true) {
+            DeleteReconcileSet("yes");
+        } else {
+            DeleteReconcileSet("no");
+        }
+    }
+
     const VisibilityFunc = (event) => {
         if (event.target.value === "") {
             setVisible(false);
@@ -353,7 +381,7 @@ function EditAccessControl(props) {
                                                 >
                                                     <List>
                                                         <ListItem onClick={() => BringOutDelete(t.id)}>Delete</ListItem>
-                                                        <ListItem onClick={() => OpenEdit(t.id, t.username, t.createbank, t.editbank, t.deletebank, t.createtransaction, t.edittransaction, t.deletetransaction, t.createrecieveorpay, t.editrecieveorpay, t.deleterecieveorpay, t.createexpense, t.editexpense, t.deleteexpense, t.createopeningbalance, t.editopeningbalance, t.deleteopeningbalance)}>Edit</ListItem>
+                                                        <ListItem onClick={() => OpenEdit(t.id, t.username, t.createbank, t.editbank, t.deletebank, t.createtransaction, t.edittransaction, t.deletetransaction, t.createrecieveorpay, t.editrecieveorpay, t.deleterecieveorpay, t.createexpense, t.editexpense, t.deleteexpense, t.createopeningbalance, t.editopeningbalance, t.deleteopeningbalance, t.createreconcile, t.editreconcile, t.deletereconcile)}>Edit</ListItem>
                                                     </List>
                                                 </IconMenu>
                                             </div>
@@ -375,6 +403,9 @@ function EditAccessControl(props) {
                                             <p className="describtionjobcontainer01"><span>Create Opening Balance:</span> {t.createopeningbalance}</p>
                                             <p className="describtionjobcontainer01"><span>Edit Opening Balance:</span> {t.editopeningbalance}</p>
                                             <p className="describtionjobcontainer01"><span>Delete Opening Balance:</span> {t.deleteopeningbalance}</p>
+                                            <p className="describtionjobcontainer01"><span>Create Reconcile:</span> {t.createreconcile}</p>
+                                            <p className="describtionjobcontainer01"><span>Edit Reconcile:</span> {t.editreconcile}</p>
+                                            <p className="describtionjobcontainer01"><span>Delete Reconcile:</span> {t.deletereconcile}</p>
                                             <div className="changefloat2"></div>
                                             <p className="timejobcontainer01">{t.date}</p>
                                         </CardContent>
@@ -427,6 +458,9 @@ function EditAccessControl(props) {
                                             <span className="accesscontroldesign">Create Opening Balance{CreateOpeningBalanceGet === "no" ? <Checkbox onChange={(e) => CreateOpeningBalanceFunc(e)} /> : <Checkbox onChange={(e) => CreateOpeningBalanceFunc(e)} checked />}</span>
                                             <span className="accesscontroldesign">Edit Opening Balance{EditOpeningBalanceGet === "no" ? <Checkbox onChange={(e) => EditOpeningBalanceFunc(e)} /> : <Checkbox onChange={(e) => EditOpeningBalanceFunc(e)} checked />}</span>
                                             <span className="accesscontroldesign">Delete Opening Balance{DeleteOpeningBalanceGet === "no" ? <Checkbox onChange={(e) => DeleteOpeningBalanceFunc(e)} /> : <Checkbox onChange={(e) => DeleteOpeningBalanceFunc(e)} checked />}</span>
+                                            <span className="accesscontroldesign">Create Reconcile{CreateReconcileGet === "no" ? <Checkbox onChange={(e) => CreateReconcileFunc(e)} /> : <Checkbox onChange={(e) => CreateReconcileFunc(e)} checked />}</span>
+                                            <span className="accesscontroldesign">Edit Reconcile{EditReconcileGet === "no" ? <Checkbox onChange={(e) => EditReconcileFunc(e)} /> : <Checkbox onChange={(e) => EditReconcileFunc(e)} checked />}</span>
+                                            <span className="accesscontroldesign">Delete Reconcile{DeleteReconcileGet === "no" ? <Checkbox onChange={(e) => DeleteReconcileFunc(e)} /> : <Checkbox onChange={(e) => DeleteReconcileFunc(e)} checked />}</span>
                                         </div>
                                         <Button
                                             fullWidth={true}

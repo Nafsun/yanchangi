@@ -296,6 +296,7 @@ function EditBanks(props) {
                                             <MenuItem value="Jaiz Bank">Jaiz Bank</MenuItem>
                                             <MenuItem value="Standard Chartered Bank">Standard Chartered Bank</MenuItem>
                                             <MenuItem value="Titan Trust Bank">Titan Trust Bank</MenuItem>
+                                            <MenuItem value="Cash">Cash</MenuItem>
                                         </TextField>
                                         <TextField
                                             id="bankaccountnumberid" label="Bank Account Number" fullWidth={true} defaultValue={bankaccountnumberGet}

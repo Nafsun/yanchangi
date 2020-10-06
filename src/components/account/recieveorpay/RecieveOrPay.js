@@ -85,7 +85,7 @@ function RecieveOrPay(props) {
         });
 
     if (banki.error) {
-        return <NoInternetConnection error={error.toString()} />;
+        return <NoInternetConnection error={banki.error.toString()} />;
     }
 
     if (error) {
