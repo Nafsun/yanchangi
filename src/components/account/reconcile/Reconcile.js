@@ -87,6 +87,10 @@ function Reconcile(props) {
             if (bankname !== null) {
                 bankname = bankname.value.replace(/(<([^>]+)>)/ig, "");
             } else {
+                bankname = "no";
+                //PopBoxerEnd(true); PopBox("From: Bank Name cannot be empty"); return false;
+            }
+            if(bankname === "no"){
                 PopBoxerEnd(true); PopBox("From: Bank Name cannot be empty"); return false;
             }
         } else {
@@ -98,6 +102,9 @@ function Reconcile(props) {
                 bankaccountnumber = bankaccountnumber.value.replace(/(<([^>]+)>)/ig, "");
             } else {
                 bankaccountnumber = "no";
+            }
+            if(bankaccountnumber === "no"){
+                PopBoxerEnd(true); PopBox("From: Bank Account Number cannot be empty"); return false;
             }
         } else {
             bankaccountnumber = BankAccountNumberGet;
@@ -113,6 +120,10 @@ function Reconcile(props) {
             if (bankname2 !== null) {
                 bankname2 = bankname2.value.replace(/(<([^>]+)>)/ig, "");
             } else {
+                bankname2 = "no";
+                //PopBoxerEnd(true); PopBox("To: Bank Name cannot be empty"); return false;
+            }
+            if(bankname2 === "no"){
                 PopBoxerEnd(true); PopBox("To: Bank Name cannot be empty"); return false;
             }
         } else {
@@ -124,6 +135,9 @@ function Reconcile(props) {
                 bankaccountnumber2 = bankaccountnumber2.value.replace(/(<([^>]+)>)/ig, "");
             } else {
                 bankaccountnumber2 = "no";
+            }
+            if(bankaccountnumber2 === "no"){
+                PopBoxerEnd(true); PopBox("To: Bank Account Number cannot be empty"); return false;
             }
         } else {
             bankaccountnumber2 = BankAccountNumberGet2;

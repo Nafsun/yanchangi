@@ -235,15 +235,19 @@ function Account() {
                                     </Grid>
                                     <Divider />
                                     <div className="accountspace">
-                                        {data.accountInfo.emailverify === "yes" ? "" : <p className="accountinfo">{data.accountInfo.email} {data.accountInfo.emailverify !== "yes" ? <Edit onClick={() => UnhideEmailEdit()} style={{ width: "1em", height: "1em", cursor: "pointer" }} /> : ""}</p>}
-                                        <p className="accountinfo">{data.accountInfo.businessname === null || data.accountInfo.businessname === "" ? "" : data.accountInfo.businessname}</p>
-                                        <p className="accountinfo">Total Balance: <span className="totality">{waitloadGet2 === false ? "" : Naira(totals.data.totaltransactions.totalbalance)}</span></p>
-                                        <p className="accountinfo">Total Debt: <span className="totality">{waitloadGet2 === false ? "" : Naira(totals.data.totaltransactions.totaldebt)}</span></p>
-                                        <p className="accountinfo">Total Overdraft: <span className="totality">{waitloadGet2 === false ? "" : Naira(totals.data.totaltransactions.totaloverdraft)}</span></p>
-                                        <p className="accountinfo">Total Expenses: <span className="totality">{waitloadGet2 === false ? "" : Naira(totals.data.totaltransactions.totalexpense)}</span></p>
-                                        <p className="accountinfo">Net: <span className="totality">{waitloadGet2 === false ? "" : Naira(totals.data.totaltransactions.net)}</span></p>
-                                        <p className="accountinfo">Total Profit: <span className="totality">{waitloadGet2 === false ? "" : Naira(totals.data.totaltransactions.totalprofit)}</span></p>
-                                        <p className="accountinfo">Net Profit: <span className="totality">{waitloadGet2 === false ? "" : Naira(totals.data.totaltransactions.netprofit)}</span></p>
+                                        {data.accountInfo.createdby === "no" ?
+                                            <div>
+                                                {data.accountInfo.emailverify === "yes" ? "" : <p className="accountinfo">{data.accountInfo.email} {data.accountInfo.emailverify !== "yes" ? <Edit onClick={() => UnhideEmailEdit()} style={{ width: "1em", height: "1em", cursor: "pointer" }} /> : ""}</p>}
+                                                <p className="accountinfo">{data.accountInfo.businessname === null || data.accountInfo.businessname === "" ? "" : data.accountInfo.businessname}</p>
+                                                <p className="accountinfo">Total Balance: <span className="totality">{waitloadGet2 === false ? "" : Naira(totals.data.totaltransactions.totalbalance)}</span></p>
+                                                <p className="accountinfo">Total Debt: <span className="totality">{waitloadGet2 === false ? "" : Naira(totals.data.totaltransactions.totaldebt)}</span></p>
+                                                <p className="accountinfo">Total Overdraft: <span className="totality">{waitloadGet2 === false ? "" : Naira(totals.data.totaltransactions.totaloverdraft)}</span></p>
+                                                <p className="accountinfo">Total Expenses: <span className="totality">{waitloadGet2 === false ? "" : Naira(totals.data.totaltransactions.totalexpense)}</span></p>
+                                                <p className="accountinfo">Net: <span className="totality">{waitloadGet2 === false ? "" : Naira(totals.data.totaltransactions.net)}</span></p>
+                                                <p className="accountinfo">Total Profit: <span className="totality">{waitloadGet2 === false ? "" : Naira(totals.data.totaltransactions.totalprofit)}</span></p>
+                                                <p className="accountinfo">Net Profit: <span className="totality">{waitloadGet2 === false ? "" : Naira(totals.data.totaltransactions.netprofit)}</span></p>
+                                            </div>
+                                        : ""}
                                         {editEmailGet === true ?
                                             <div>
                                                 <ThemeProvider theme={theme}>
@@ -289,14 +293,14 @@ function Account() {
                                         <Tab label="Reconcile" {...a11yProps(10)} />
                                         <Tab label="Reconcile List" {...a11yProps(11)} />
                                         {accessv.data.accessverify.createdby === "no" ?
-                                        <Tab label="Access Control" {...a11yProps(12)} />
-                                        : ""}
+                                            <Tab label="Access Control" {...a11yProps(12)} />
+                                            : ""}
                                         {accessv.data.accessverify.createdby === "no" ?
-                                        <Tab label="Edit Access Control" {...a11yProps(13)} />
-                                        : ""}
+                                            <Tab label="Edit Access Control" {...a11yProps(13)} />
+                                            : ""}
                                         {accessv.data.accessverify.createdby === "no" ?
-                                        <Tab label="Edit Profile" {...a11yProps(14)} />
-                                        : ""}
+                                            <Tab label="Edit Profile" {...a11yProps(14)} />
+                                            : ""}
                                     </Tabs>
                                 </AppBar>
                                 {accessv.data.accessverify.createtransaction === "yes" ?
@@ -390,7 +394,7 @@ function Account() {
                                     </TabPanel>
                                 }
                                 {accessv.data.accessverify.createreconcile === "yes" ?
-                                    <TabPanel value={value} index={10}> 
+                                    <TabPanel value={value} index={10}>
                                         <Reconcile refetcher={totals.refetch} refetch={refetch} />
                                     </TabPanel>
                                     :
@@ -411,7 +415,7 @@ function Account() {
                                     <TabPanel value={value} index={12}>
                                         <AccessControl />
                                     </TabPanel>
-                                :
+                                    :
                                     <TabPanel value={value} index={12}>
                                         <p className="donthaveaccess">You don't have access to this section</p>
                                     </TabPanel>
@@ -420,7 +424,7 @@ function Account() {
                                     <TabPanel value={value} index={13}>
                                         <EditAccessControl />
                                     </TabPanel>
-                                :
+                                    :
                                     <TabPanel value={value} index={13}>
                                         <p className="donthaveaccess">You don't have access to this section</p>
                                     </TabPanel>
@@ -429,7 +433,7 @@ function Account() {
                                     <TabPanel value={value} index={14}>
                                         <Edits refetch={refetch} />
                                     </TabPanel>
-                                :
+                                    :
                                     <TabPanel value={value} index={14}>
                                         <p className="donthaveaccess">You don't have access to this section</p>
                                     </TabPanel>
