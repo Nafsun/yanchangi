@@ -235,7 +235,7 @@ function Account() {
                                     </Grid>
                                     <Divider />
                                     <div className="accountspace">
-                                        {data.accountInfo.createdby === "no" ?
+                                        {accessv.data.accessverify.createdby === "no" ?
                                             <div>
                                                 {data.accountInfo.emailverify === "yes" ? "" : <p className="accountinfo">{data.accountInfo.email} {data.accountInfo.emailverify !== "yes" ? <Edit onClick={() => UnhideEmailEdit()} style={{ width: "1em", height: "1em", cursor: "pointer" }} /> : ""}</p>}
                                                 <p className="accountinfo">{data.accountInfo.businessname === null || data.accountInfo.businessname === "" ? "" : data.accountInfo.businessname}</p>

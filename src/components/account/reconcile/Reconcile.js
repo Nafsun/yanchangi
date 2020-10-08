@@ -262,13 +262,13 @@ function Reconcile(props) {
                         (<div>
                             <TextField
                                 name="bankname" label="Bank Name" fullWidth={true}
-                                margin="normal" variant="outlined" id="bankname" />
+                                margin="normal" variant="outlined" id="bankname" helperText="optional" />
                             <TextField
                                 name="bankaccountnumber" label="Bank Account Number" fullWidth={true}
-                                margin="normal" variant="outlined" id="bankaccountnumber" />
+                                margin="normal" variant="outlined" id="bankaccountnumber" helperText="optional" />
                             <TextField
                                 name="bankaccountname" label="Bank Account Name" fullWidth={true}
-                                margin="normal" variant="outlined" id="bankaccountname" />
+                                margin="normal" variant="outlined" id="bankaccountname" helperText="optional" />
                         </div>)
                         : ""}
                     <FormControl component="fieldset">
@@ -302,13 +302,13 @@ function Reconcile(props) {
                         (<div>
                             <TextField
                                 name="bankname" label="Bank Name" fullWidth={true}
-                                margin="normal" variant="outlined" id="bankname2" />
+                                margin="normal" variant="outlined" id="bankname2" helperText="optional" />
                             <TextField
                                 name="bankaccountnumber" label="Bank Account Number" fullWidth={true}
-                                margin="normal" variant="outlined" id="bankaccountnumber2" />
+                                margin="normal" variant="outlined" id="bankaccountnumber2" helperText="optional" />
                             <TextField
                                 name="bankaccountname" label="Bank Account Name" fullWidth={true}
-                                margin="normal" variant="outlined" id="bankaccountname2" />
+                                margin="normal" variant="outlined" id="bankaccountname2" helperText="optional" />
                         </div>)
                         : ""}
                     <br />

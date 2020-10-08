@@ -242,6 +242,10 @@ function EditReconcile(props) {
             if (bankname !== null) {
                 bankname = bankname.value.replace(/(<([^>]+)>)/ig, "");
             } else {
+                bankname = "no";
+                //PopBoxerEnd(true); PopBox("From: Bank Name cannot be empty"); return false;
+            }
+            if(bankname === "no"){
                 PopBoxerEnd(true); PopBox("From: Bank Name cannot be empty"); return false;
             }
         } else {
@@ -253,6 +257,9 @@ function EditReconcile(props) {
                 bankaccountnumber = bankaccountnumber.value.replace(/(<([^>]+)>)/ig, "");
             } else {
                 bankaccountnumber = "no";
+            }
+            if(bankaccountnumber === "no"){
+                PopBoxerEnd(true); PopBox("From: Bank Account Number cannot be empty"); return false;
             }
         } else {
             bankaccountnumber = BankAccountNumberGet;
@@ -268,6 +275,10 @@ function EditReconcile(props) {
             if (bankname2 !== null) {
                 bankname2 = bankname2.value.replace(/(<([^>]+)>)/ig, "");
             } else {
+                bankname2 = "no";
+                //PopBoxerEnd(true); PopBox("To: Bank Name cannot be empty"); return false;
+            }
+            if(bankname2 === "no"){
                 PopBoxerEnd(true); PopBox("To: Bank Name cannot be empty"); return false;
             }
         } else {
@@ -279,6 +290,9 @@ function EditReconcile(props) {
                 bankaccountnumber2 = bankaccountnumber2.value.replace(/(<([^>]+)>)/ig, "");
             } else {
                 bankaccountnumber2 = "no";
+            }
+            if(bankaccountnumber2 === "no"){
+                PopBoxerEnd(true); PopBox("To: Bank Account Number cannot be empty"); return false;
             }
         } else {
             bankaccountnumber2 = BankAccountNumberGet2;
@@ -423,13 +437,13 @@ function EditReconcile(props) {
                                             <p className="describtionjobcontainer01"><span>Description:</span> {t.description}</p>
                                             <p className="describtionjobcontainer01"><span>Type:</span> {t.sendorrecieved}</p>
                                             <p className="describtionjobcontainer01"><span>From:</span> {t.from}</p>
-                                            <p className="describtionjobcontainer01"><span>Bank Name:</span> {t.bankname}</p>
-                                            <p className="describtionjobcontainer01"><span>Bank Account Number:</span> {t.bankaccountnumber}</p>
-                                            {t.bankaccountname !== "no" ? <p className="describtionjobcontainer01"><span>Bank Account Name:</span> {t.bankaccountname}</p> : ""}
+                                            {t.bankname !== "" ? <p className="describtionjobcontainer01"><span>Bank Name:</span> {t.bankname}</p> : ""}
+                                            {t.bankaccountnumber !== "" ? <p className="describtionjobcontainer01"><span>Bank Account Number:</span> {t.bankaccountnumber}</p> : ""}
+                                            {t.bankaccountname !== "" || t.bankaccountname !== "no" ? <p className="describtionjobcontainer01"><span>Bank Account Name:</span> {t.bankaccountname}</p> : ""}
                                             <p className="describtionjobcontainer01"><span>To:</span> {t.to}</p>
-                                            <p className="describtionjobcontainer01"><span>Bank Name:</span> {t.bankname2}</p>
-                                            <p className="describtionjobcontainer01"><span>Bank Account Number:</span> {t.bankaccountnumber2}</p>
-                                            {t.bankaccountname2 !== "no" ? <p className="describtionjobcontainer01"><span>Bank Account Name:</span> {t.bankaccountname2}</p> : ""}
+                                            {t.bankname2 !== "" ? <p className="describtionjobcontainer01"><span>Bank Name:</span> {t.bankname2}</p> : ""}
+                                            {t.bankaccountnumber2 !== "" ? <p className="describtionjobcontainer01"><span>Bank Account Number:</span> {t.bankaccountnumber2}</p> : ""}
+                                            {t.bankaccountname2 !== "" || t.bankaccountname2 !== "no" ? <p className="describtionjobcontainer01"><span>Bank Account Name:</span> {t.bankaccountname2}</p> : ""}
                                             <div className="changefloat2"></div>
                                             <p className="timejobcontainer01">{t.date}</p>
                                         </CardContent>
@@ -502,13 +516,13 @@ function EditReconcile(props) {
                                         {frombankGet === "external" ?
                                             (<div>
                                                 <TextField
-                                                    name="bankname" label="Bank Name" fullWidth={true}
+                                                    name="bankname" label="Bank Name" fullWidth={true} helperText="optional"
                                                     margin="normal" variant="outlined" id="bankname" defaultValue={BankNameGet} />
                                                 <TextField
-                                                    name="bankaccountnumber" label="Bank Account Number" fullWidth={true}
+                                                    name="bankaccountnumber" label="Bank Account Number" fullWidth={true} helperText="optional"
                                                     margin="normal" variant="outlined" id="bankaccountnumber" defaultValue={BankAccountNumberGet} />
                                                 <TextField
-                                                    name="bankaccountname" label="Bank Account Name" fullWidth={true}
+                                                    name="bankaccountname" label="Bank Account Name" fullWidth={true} helperText="optional"
                                                     margin="normal" variant="outlined" id="bankaccountname" defaultValue={BankAccountNameGet !== "no" ? BankAccountNameGet : ""} />
                                             </div>)
                                             : ""}
@@ -542,13 +556,13 @@ function EditReconcile(props) {
                                         {tobankGet === "external" ?
                                             (<div>
                                                 <TextField
-                                                    name="bankname" label="Bank Name" fullWidth={true}
+                                                    name="bankname" label="Bank Name" fullWidth={true} helperText="optional"
                                                     margin="normal" variant="outlined" id="bankname2" defaultValue={BankNameGet2} />
                                                 <TextField
-                                                    name="bankaccountnumber" label="Bank Account Number" fullWidth={true}
+                                                    name="bankaccountnumber" label="Bank Account Number" fullWidth={true} helperText="optional"
                                                     margin="normal" variant="outlined" id="bankaccountnumber2" defaultValue={BankAccountNumberGet2} />
                                                 <TextField
-                                                    name="bankaccountname" label="Bank Account Name" fullWidth={true}
+                                                    name="bankaccountname" label="Bank Account Name" fullWidth={true} helperText="optional"
                                                     margin="normal" variant="outlined" id="bankaccountname2" defaultValue={BankAccountNameGet2 !== "no" ? BankAccountNameGet2 : ""} />
                                             </div>)
                                             : ""}
