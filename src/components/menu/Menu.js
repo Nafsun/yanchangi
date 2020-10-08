@@ -39,6 +39,12 @@ function Menu() {
         document.getElementById(idname).style.color = color;
     }
 
+    const Logout = () => {
+        localStorage.removeItem("userinfo");
+        document.getElementById("hidelogin").click();
+        dispatch(loadingMenuChangeFalse());
+    }
+
     return (
         <div>
             <p className="abovelinkmenu">
@@ -100,6 +106,15 @@ function Menu() {
                         onClick={() => output("hideaccount")}>
                         Account
                 </p>
+                {userinfo === null ? "" :
+                <p
+                        onMouseOut={() => changeOutStyleMenu("logoutchanger", "rgb(107, 43, 8)")}
+                        onMouseOver={() => changeInStyleMenu("logoutchanger", "black")}
+                        id="logoutchanger"
+                        onClick={() => Logout()}>
+                        Logout
+                </p>
+                }
                     <br />
                 </div>
                 <div className="menudesign2">

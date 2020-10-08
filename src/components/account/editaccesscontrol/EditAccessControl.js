@@ -26,7 +26,7 @@ import UsernameValidateCheck from '../../functions/usernamevalidatecheck';
 const EXISTINGUSERS = gql`
     query existingusers($username: String, $jwtauth: String){
         existingusers(username: $username, jwtauth: $jwtauth){
-            id, username, createbank, editbank, deletebank, createtransaction, edittransaction, deletetransaction, createrecieveorpay, editrecieveorpay, deleterecieveorpay, createexpense, editexpense, deleteexpense, createopeningbalance, editopeningbalance, deleteopeningbalance, createreconcile, editreconcile, deletereconcile
+            id, username, createbank, editbank, deletebank, createtransaction, edittransaction, deletetransaction, createrecieveorpay, editrecieveorpay, deleterecieveorpay, createexpense, editexpense, deleteexpense, createopeningbalance, editopeningbalance, deleteopeningbalance, createreconcile, editreconcile, deletereconcile, listofcustomers, listofsuppliers
         }
     }
 `;
@@ -42,8 +42,8 @@ const EXISTINGUSERSDELETE = gql`
 
 //Existing users update
 const EXISTINGUSERSUPDATE = gql`
-    mutation existingusersupdate($id: String, $username: String, $newusername: String, $newpassword: String, $createbank: String, $editbank: String, $deletebank: String, $createtransaction: String, $edittransaction: String, $deletetransaction: String, $createrecieveorpay: String, $editrecieveorpay: String, $deleterecieveorpay: String, $createexpense: String, $editexpense: String, $deleteexpense: String, $createopeningbalance: String, $editopeningbalance: String, $deleteopeningbalance: String, $createreconcile: String, $editreconcile: String, $deletereconcile: String, $jwtauth: String){
-        existingusersupdate(id: $id, username: $username, newusername: $newusername, newpassword: $newpassword, createbank: $createbank, editbank: $editbank, deletebank: $deletebank, createtransaction: $createtransaction, edittransaction: $edittransaction, deletetransaction: $deletetransaction, createrecieveorpay: $createrecieveorpay, editrecieveorpay: $editrecieveorpay, deleterecieveorpay: $deleterecieveorpay, createexpense: $createexpense, editexpense: $editexpense, deleteexpense: $deleteexpense, createopeningbalance: $createopeningbalance, editopeningbalance: $editopeningbalance, deleteopeningbalance: $deleteopeningbalance, createreconcile: $createreconcile, editreconcile: $editreconcile, deletereconcile: $deletereconcile, jwtauth: $jwtauth){
+    mutation existingusersupdate($id: String, $username: String, $newusername: String, $newpassword: String, $createbank: String, $editbank: String, $deletebank: String, $createtransaction: String, $edittransaction: String, $deletetransaction: String, $createrecieveorpay: String, $editrecieveorpay: String, $deleterecieveorpay: String, $createexpense: String, $editexpense: String, $deleteexpense: String, $createopeningbalance: String, $editopeningbalance: String, $deleteopeningbalance: String, $createreconcile: String, $editreconcile: String, $deletereconcile: String, $listofcustomers: String, $listofsuppliers: String, $jwtauth: String){
+        existingusersupdate(id: $id, username: $username, newusername: $newusername, newpassword: $newpassword, createbank: $createbank, editbank: $editbank, deletebank: $deletebank, createtransaction: $createtransaction, edittransaction: $edittransaction, deletetransaction: $deletetransaction, createrecieveorpay: $createrecieveorpay, editrecieveorpay: $editrecieveorpay, deleterecieveorpay: $deleterecieveorpay, createexpense: $createexpense, editexpense: $editexpense, deleteexpense: $deleteexpense, createopeningbalance: $createopeningbalance, editopeningbalance: $editopeningbalance, deleteopeningbalance: $deleteopeningbalance, createreconcile: $createreconcile, editreconcile: $editreconcile, deletereconcile: $deletereconcile, listofcustomers: $listofcustomers, listofsuppliers: $listofsuppliers, jwtauth: $jwtauth){
             error
         }
     }
@@ -80,6 +80,8 @@ function EditAccessControl(props) {
     const [CreateReconcileGet, CreateReconcileSet] = useState("no");
     const [EditReconcileGet, EditReconcileSet] = useState("no");
     const [DeleteReconcileGet, DeleteReconcileSet] = useState("no");
+    const [ListofCustomersGet, ListofCustomersSet] = useState("no");
+    const [ListofSuppliersGet, ListofSuppliersSet] = useState("no");
 
     const [deleteidGet, deleteidSet] = useState(null);
     const [deleteGetter, deleteSetter] = useState(false);
@@ -142,13 +144,13 @@ function EditAccessControl(props) {
         PopBoxerEnd(false);
     }
 
-    const OpenEdit = (id, username, createbank, editbank, deletebank, createtransaction, edittransaction, deletetransaction, createrecieveorpay, editrecieveorpay, deleterecieveorpay, createexpense, editexpense, deleteexpense, createopeningbalance, editopeningbalance, deleteopeningbalance, createreconcile, editreconcile, deletereconcile) => {
+    const OpenEdit = (id, username, createbank, editbank, deletebank, createtransaction, edittransaction, deletetransaction, createrecieveorpay, editrecieveorpay, deleterecieveorpay, createexpense, editexpense, deleteexpense, createopeningbalance, editopeningbalance, deleteopeningbalance, createreconcile, editreconcile, deletereconcile, listofcustomers, listofsuppliers) => {
         idSet(id); usernameSet(username); CreateBankSet(createbank); EditBankSet(editbank); DeleteBankSet(deletebank); CreateTransactionSet(createtransaction);
         EditTransactionSet(edittransaction); DeleteTransactionSet(deletetransaction); CreateRecieveorpaySet(createrecieveorpay); EditRecieveorpaySet(editrecieveorpay);
         DeleteRecieveorpaySet(deleterecieveorpay); CreateExpenseSet(createexpense); EditExpenseSet(editexpense);
         DeleteExpenseSet(deleteexpense); CreateOpeningBalanceSet(createopeningbalance); EditOpeningBalanceSet(editopeningbalance);
         DeleteOpeningBalanceSet(deleteopeningbalance); CreateReconcileSet(createreconcile); EditReconcileSet(editreconcile);
-        DeleteReconcileSet(deletereconcile); 
+        DeleteReconcileSet(deletereconcile); ListofCustomersSet(listofcustomers); ListofSuppliersSet(listofsuppliers);
         editSet(true);
     }
 
@@ -170,7 +172,7 @@ function EditAccessControl(props) {
 
         nextClickSet(true);
 
-        existingusersupdatemutation({ variables: { id: idGet, username: u, newusername, newpassword, createbank: CreateBankGet, editbank: EditBankGet, deletebank: DeleteBankGet, createtransaction: CreateTransactionGet, edittransaction: EditTransactionGet, deletetransaction: DeleteTransactionGet, createrecieveorpay: CreateRecieveorpayGet, editrecieveorpay: EditRecieveorpayGet, deleterecieveorpay: DeleteRecieveorpayGet, createexpense: CreateExpenseGet, editexpense: EditExpenseGet, deleteexpense: DeleteExpenseGet, createopeningbalance: CreateOpeningBalanceGet, editopeningbalance: EditOpeningBalanceGet, deleteopeningbalance: DeleteOpeningBalanceGet, createreconcile: CreateReconcileGet, editreconcile: EditReconcileGet, deletereconcile: DeleteReconcileGet, jwtauth: j } }).then(({ data }) => {
+        existingusersupdatemutation({ variables: { id: idGet, username: u, newusername, newpassword, createbank: CreateBankGet, editbank: EditBankGet, deletebank: DeleteBankGet, createtransaction: CreateTransactionGet, edittransaction: EditTransactionGet, deletetransaction: DeleteTransactionGet, createrecieveorpay: CreateRecieveorpayGet, editrecieveorpay: EditRecieveorpayGet, deleterecieveorpay: DeleteRecieveorpayGet, createexpense: CreateExpenseGet, editexpense: EditExpenseGet, deleteexpense: DeleteExpenseGet, createopeningbalance: CreateOpeningBalanceGet, editopeningbalance: EditOpeningBalanceGet, deleteopeningbalance: DeleteOpeningBalanceGet, createreconcile: CreateReconcileGet, editreconcile: EditReconcileGet, deletereconcile: DeleteReconcileGet, listofcustomers: ListofCustomersGet, listofsuppliers: ListofSuppliersGet, jwtauth: j } }).then(({ data }) => {
             nextClickSet(false);
             editSet(false);
             if (data.existingusersupdate.error === "no") {
@@ -332,6 +334,22 @@ function EditAccessControl(props) {
         }
     }
 
+    const ListofCustomersFunc = (event) => {
+        if (event.target.checked === true) {
+            ListofCustomersSet("yes");
+        } else {
+            ListofCustomersSet("no");
+        }
+    }
+    
+    const ListofSuppliersFunc = (event) => {
+        if (event.target.checked === true) {
+            ListofSuppliersSet("yes");
+        } else {
+            ListofSuppliersSet("no");
+        }
+    }
+
     const VisibilityFunc = (event) => {
         if (event.target.value === "") {
             setVisible(false);
@@ -381,7 +399,7 @@ function EditAccessControl(props) {
                                                 >
                                                     <List>
                                                         <ListItem onClick={() => BringOutDelete(t.id)}>Delete</ListItem>
-                                                        <ListItem onClick={() => OpenEdit(t.id, t.username, t.createbank, t.editbank, t.deletebank, t.createtransaction, t.edittransaction, t.deletetransaction, t.createrecieveorpay, t.editrecieveorpay, t.deleterecieveorpay, t.createexpense, t.editexpense, t.deleteexpense, t.createopeningbalance, t.editopeningbalance, t.deleteopeningbalance, t.createreconcile, t.editreconcile, t.deletereconcile)}>Edit</ListItem>
+                                                        <ListItem onClick={() => OpenEdit(t.id, t.username, t.createbank, t.editbank, t.deletebank, t.createtransaction, t.edittransaction, t.deletetransaction, t.createrecieveorpay, t.editrecieveorpay, t.deleterecieveorpay, t.createexpense, t.editexpense, t.deleteexpense, t.createopeningbalance, t.editopeningbalance, t.deleteopeningbalance, t.createreconcile, t.editreconcile, t.deletereconcile, t.listofcustomers, t.listofsuppliers)}>Edit</ListItem>
                                                     </List>
                                                 </IconMenu>
                                             </div>
@@ -406,6 +424,8 @@ function EditAccessControl(props) {
                                             <p className="describtionjobcontainer01"><span>Create Reconcile:</span> {t.createreconcile}</p>
                                             <p className="describtionjobcontainer01"><span>Edit Reconcile:</span> {t.editreconcile}</p>
                                             <p className="describtionjobcontainer01"><span>Delete Reconcile:</span> {t.deletereconcile}</p>
+                                            <p className="describtionjobcontainer01"><span>List of Customers:</span> {t.listofcustomers}</p>
+                                            <p className="describtionjobcontainer01"><span>List of Suppliers:</span> {t.listofsuppliers}</p>
                                             <div className="changefloat2"></div>
                                             <p className="timejobcontainer01">{t.date}</p>
                                         </CardContent>
@@ -461,6 +481,8 @@ function EditAccessControl(props) {
                                             <span className="accesscontroldesign">Create Reconcile{CreateReconcileGet === "no" ? <Checkbox onChange={(e) => CreateReconcileFunc(e)} /> : <Checkbox onChange={(e) => CreateReconcileFunc(e)} checked />}</span>
                                             <span className="accesscontroldesign">Edit Reconcile{EditReconcileGet === "no" ? <Checkbox onChange={(e) => EditReconcileFunc(e)} /> : <Checkbox onChange={(e) => EditReconcileFunc(e)} checked />}</span>
                                             <span className="accesscontroldesign">Delete Reconcile{DeleteReconcileGet === "no" ? <Checkbox onChange={(e) => DeleteReconcileFunc(e)} /> : <Checkbox onChange={(e) => DeleteReconcileFunc(e)} checked />}</span>
+                                            <span className="accesscontroldesign">List of Customers{ListofCustomersGet === "no" ? <Checkbox onChange={(e) => ListofCustomersFunc(e)} /> : <Checkbox onChange={(e) => ListofCustomersFunc(e)} checked />}</span>
+                                            <span className="accesscontroldesign">List of Suppliers{ListofSuppliersGet === "no" ? <Checkbox onChange={(e) => ListofSuppliersFunc(e)} /> : <Checkbox onChange={(e) => ListofSuppliersFunc(e)} checked />}</span>
                                         </div>
                                         <Button
                                             fullWidth={true}

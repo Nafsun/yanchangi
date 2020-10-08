@@ -3418,6 +3418,10 @@ a:hover{
     color: rgb(107, 43, 8);
     cursor:pointer;
 }
+#logoutchanger{
+    color: rgb(107, 43, 8);
+    cursor:pointer;
+}
 .nointernet{
     margin-left:10%;
     margin-right:10%;

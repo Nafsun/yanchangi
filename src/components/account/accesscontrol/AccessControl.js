@@ -15,8 +15,8 @@ import UsernameValidateCheck from '../../functions/usernamevalidatecheck';
 
 //Add new user
 const ADDNEWUSER = gql`
-    mutation addnewuser($username: String, $newusername: String, $newpassword: String, $createbank: String, $editbank: String, $deletebank: String, $createtransaction: String, $edittransaction: String, $deletetransaction: String, $createrecieveorpay: String, $editrecieveorpay: String, $deleterecieveorpay: String, $createexpense: String, $editexpense: String, $deleteexpense: String, $createopeningbalance: String, $editopeningbalance: String, $deleteopeningbalance: String, $createreconcile: String, $editreconcile: String, $deletereconcile: String, $jwtauth: String){
-        addnewuser(username: $username, newusername: $newusername, newpassword: $newpassword, createbank: $createbank, editbank: $editbank, deletebank: $deletebank, createtransaction: $createtransaction, edittransaction: $edittransaction, deletetransaction: $deletetransaction, createrecieveorpay: $createrecieveorpay, editrecieveorpay: $editrecieveorpay, deleterecieveorpay: $deleterecieveorpay, createexpense: $createexpense, editexpense: $editexpense, deleteexpense: $deleteexpense, createopeningbalance: $createopeningbalance, editopeningbalance: $editopeningbalance, deleteopeningbalance: $deleteopeningbalance, createreconcile: $createreconcile, editreconcile: $editreconcile, deletereconcile: $deletereconcile, jwtauth: $jwtauth){
+    mutation addnewuser($username: String, $newusername: String, $newpassword: String, $createbank: String, $editbank: String, $deletebank: String, $createtransaction: String, $edittransaction: String, $deletetransaction: String, $createrecieveorpay: String, $editrecieveorpay: String, $deleterecieveorpay: String, $createexpense: String, $editexpense: String, $deleteexpense: String, $createopeningbalance: String, $editopeningbalance: String, $deleteopeningbalance: String, $createreconcile: String, $editreconcile: String, $deletereconcile: String, $listofcustomers: String, $listofsuppliers: String, $jwtauth: String){
+        addnewuser(username: $username, newusername: $newusername, newpassword: $newpassword, createbank: $createbank, editbank: $editbank, deletebank: $deletebank, createtransaction: $createtransaction, edittransaction: $edittransaction, deletetransaction: $deletetransaction, createrecieveorpay: $createrecieveorpay, editrecieveorpay: $editrecieveorpay, deleterecieveorpay: $deleterecieveorpay, createexpense: $createexpense, editexpense: $editexpense, deleteexpense: $deleteexpense, createopeningbalance: $createopeningbalance, editopeningbalance: $editopeningbalance, deleteopeningbalance: $deleteopeningbalance, createreconcile: $createreconcile, editreconcile: $editreconcile, deletereconcile: $deletereconcile, listofcustomers: $listofcustomers, listofsuppliers: $listofsuppliers, jwtauth: $jwtauth){
             error
         }
     }
@@ -29,7 +29,7 @@ function AccessControl() {
     const [nextClickGet, nextClickSet] = useState(false);
     const [PopBoxerStart, PopBoxerEnd] = useState(false);
     const [PopBoxTextGet, PopBoxTextSet] = useState(null);
-    //username, newusername, newpassword, createbank, editbank, deletebank, createtransaction, edittransaction, deletetransaction, createrecieveorpay, editrecieveorpay, deleterecieveorpay, createexpense, editexpense, deleteexpense, createopeningbalance, editopeningbalance, deleteopeningbalance, createreconcile, editreconcile, deletereconcile, jwtauth
+    //username, newusername, newpassword, createbank, editbank, deletebank, createtransaction, edittransaction, deletetransaction, createrecieveorpay, editrecieveorpay, deleterecieveorpay, createexpense, editexpense, deleteexpense, createopeningbalance, editopeningbalance, deleteopeningbalance, createreconcile, editreconcile, deletereconcile, listofcustomers, listofsuppliers, jwtauth
     //CreateBankGet, EditBankGet, DeleteBankGet, CreateTransactionGet, EditTransactionGet, DeleteTransactionGet, CreateRecieveorpayGet, EditRecieveorpayGet, DeleteRecieveorpayGet
     //CreateBankSet, EditBankSet, DeleteBankSet, CreateTransactionSet, EditTransactionSet, DeleteTransactionSet, CreateRecieveorpaySet, EditRecieveorpaySet, DeleteRecieveorpaySet
     const [CreateBankGet, CreateBankSet] = useState("no");
@@ -50,6 +50,8 @@ function AccessControl() {
     const [CreateReconcileGet, CreateReconcileSet] = useState("no");
     const [EditReconcileGet, EditReconcileSet] = useState("no");
     const [DeleteReconcileGet, DeleteReconcileSet] = useState("no");
+    const [ListofCustomersGet, ListofCustomersSet] = useState("no");
+    const [ListofSuppliersGet, ListofSuppliersSet] = useState("no");
 
     const [getVisible, setVisible] = useState(false);
     const [getChangeEye, setChangeEye] = useState(<VisibilityOff/>);
@@ -72,7 +74,7 @@ function AccessControl() {
 
         nextClickSet(true);
 
-        addnewusermut({ variables: { username: u, newusername, newpassword, createbank: CreateBankGet, editbank: EditBankGet, deletebank: DeleteBankGet, createtransaction: CreateTransactionGet, edittransaction: EditTransactionGet, deletetransaction: DeleteTransactionGet, createrecieveorpay: CreateRecieveorpayGet, editrecieveorpay: EditRecieveorpayGet, deleterecieveorpay: DeleteRecieveorpayGet, createexpense: CreateExpenseGet, editexpense: EditExpenseGet, deleteexpense: DeleteExpenseGet, createopeningbalance: CreateOpeningBalanceGet, editopeningbalance: EditOpeningBalanceGet, deleteopeningbalance: DeleteOpeningBalanceGet, createreconcile: CreateReconcileGet, editreconcile: EditReconcileGet, deletereconcile: DeleteReconcileGet, jwtauth: j } }).then(({ data }) => {
+        addnewusermut({ variables: { username: u, newusername, newpassword, createbank: CreateBankGet, editbank: EditBankGet, deletebank: DeleteBankGet, createtransaction: CreateTransactionGet, edittransaction: EditTransactionGet, deletetransaction: DeleteTransactionGet, createrecieveorpay: CreateRecieveorpayGet, editrecieveorpay: EditRecieveorpayGet, deleterecieveorpay: DeleteRecieveorpayGet, createexpense: CreateExpenseGet, editexpense: EditExpenseGet, deleteexpense: DeleteExpenseGet, createopeningbalance: CreateOpeningBalanceGet, editopeningbalance: EditOpeningBalanceGet, deleteopeningbalance: DeleteOpeningBalanceGet, createreconcile: CreateReconcileGet, editreconcile: EditReconcileGet, deletereconcile: DeleteReconcileGet, listofcustomers: ListofCustomersGet, listofsuppliers: ListofSuppliersGet, jwtauth: j } }).then(({ data }) => {
             nextClickSet(false);
             if (data.addnewuser.error === "no") {
                 PopBoxerEnd(true); PopBox(`Successfully Added ${newusername} to your user base`);
@@ -234,6 +236,22 @@ function AccessControl() {
         }
     }
 
+    const ListofCustomersFunc = (event) => {
+        if (event.target.checked === true) {
+            ListofCustomersSet("yes");
+        } else {
+            ListofCustomersSet("no");
+        }
+    }
+    
+    const ListofSuppliersFunc = (event) => {
+        if (event.target.checked === true) {
+            ListofSuppliersSet("yes");
+        } else {
+            ListofSuppliersSet("no");
+        }
+    }
+
     const VisibilityFunc = (event) => {
         if(event.target.value === ""){
             setVisible(false);
@@ -288,6 +306,8 @@ function AccessControl() {
                     <span className="accesscontroldesign">Create Reconcile<Checkbox onChange={(e) => CreateReconcileFunc(e)} /></span> 
                     <span className="accesscontroldesign">Edit Reconcile<Checkbox onChange={(e) => EditReconcileFunc(e)} /></span> 
                     <span className="accesscontroldesign">Delete Reconcile<Checkbox onChange={(e) => DeleteReconcileFunc(e)} /></span> 
+                    <span className="accesscontroldesign">List of Customers<Checkbox onChange={(e) => ListofCustomersFunc(e)} /></span> 
+                    <span className="accesscontroldesign">List of Suppliers<Checkbox onChange={(e) => ListofSuppliersFunc(e)} /></span> 
                     </div>
                     <Button
                         fullWidth={true}
