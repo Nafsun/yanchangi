@@ -439,11 +439,11 @@ function EditReconcile(props) {
                                             <p className="describtionjobcontainer01"><span>From:</span> {t.from}</p>
                                             {t.bankname !== "" ? <p className="describtionjobcontainer01"><span>Bank Name:</span> {t.bankname}</p> : ""}
                                             {t.bankaccountnumber !== "" ? <p className="describtionjobcontainer01"><span>Bank Account Number:</span> {t.bankaccountnumber}</p> : ""}
-                                            {t.bankaccountname !== "" || t.bankaccountname !== "no" ? <p className="describtionjobcontainer01"><span>Bank Account Name:</span> {t.bankaccountname}</p> : ""}
+                                            {t.bankaccountname !== "" && t.bankaccountname !== "no" ? <p className="describtionjobcontainer01"><span>Bank Account Name:</span> {t.bankaccountname}</p> : ""}
                                             <p className="describtionjobcontainer01"><span>To:</span> {t.to}</p>
                                             {t.bankname2 !== "" ? <p className="describtionjobcontainer01"><span>Bank Name:</span> {t.bankname2}</p> : ""}
                                             {t.bankaccountnumber2 !== "" ? <p className="describtionjobcontainer01"><span>Bank Account Number:</span> {t.bankaccountnumber2}</p> : ""}
-                                            {t.bankaccountname2 !== "" || t.bankaccountname2 !== "no" ? <p className="describtionjobcontainer01"><span>Bank Account Name:</span> {t.bankaccountname2}</p> : ""}
+                                            {t.bankaccountname2 !== "" && t.bankaccountname2 !== "no" ? <p className="describtionjobcontainer01"><span>Bank Account Name:</span> {t.bankaccountname2}</p> : ""}
                                             <div className="changefloat2"></div>
                                             <p className="timejobcontainer01">{t.date}</p>
                                         </CardContent>
