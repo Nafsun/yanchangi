@@ -53,9 +53,9 @@ function RecieveOrPay(props) {
     const [PopBoxTextGet, PopBoxTextSet] = useState(null);
     const [recievedorpayGet, recievedorpaySet] = useState(props.recieved !== undefined ? props.recieved : null);
     const [chooseclientGet, chooseclientSet] = useState(props.chooseclient !== undefined ? props.chooseclient : null);
-    const [BankNameGet, BankNameSet] = useState("");
-    const [BankAccountNameGet, BankAccountNameSet] = useState("");
-    const [BankAccountNumberGet, BankAccountNumberSet] = useState("");
+    const [BankNameGet, BankNameSet] = useState(props.bankname !== undefined ? props.bankname : "");
+    const [BankAccountNameGet, BankAccountNameSet] = useState(props.bankaccountname !== undefined ? props.bankaccountname : "");
+    const [BankAccountNumberGet, BankAccountNumberSet] = useState(props.bankaccountnumber !== undefined ? props.bankaccountnumber : "");
     const [waitloadGet, waitloadSet] = useState(false);
     const [waitloadGet2, waitloadSet2] = useState(false);
     const [getHistory, setHistory] = useState("");
@@ -228,7 +228,7 @@ function RecieveOrPay(props) {
                         <div>
                             {banki.data.getallavailablebanks.length === 0 ? <p className="addbankinfo">Please add your bank balance and information in the 'ADD BANK' section to be able to choose the bank a customer or supplier send money to or recieved money from.</p> : "" }
                             <TextField
-                                name="bankname" label="Bank Name" fullWidth={true}
+                                name="bankname" label="Bank Name" fullWidth={true} 
                                 margin="normal" variant="outlined" onChange={(e) => BankNameChanger(e)} value={BankNameGet} select>
                                 {banki.data.getallavailablebanks.map((e) => (
                                     <MenuItem key={e.id} value={e.bankname}>{e.bankname}</MenuItem>

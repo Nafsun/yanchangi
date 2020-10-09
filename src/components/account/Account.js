@@ -218,7 +218,7 @@ function Account() {
                         <title>Account</title>
                     </Helmet>
                     <Grid container direction="row" alignItems="flex-start" justify="flex-start" spacing={1}>
-                        <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+                        <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
                             <div>
                                 <br />
                                 <div id="homeexpander5">
@@ -271,7 +271,7 @@ function Account() {
                                 </div>
                             </div>
                         </Grid>
-                        <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+                        <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>
                             <div id="homeexpander5">
                                 <AppBar position="static" style={{ backgroundColor: "rgb(107, 43, 8)", borderRadius: "2px" }}>
                                     <Tabs

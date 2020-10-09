@@ -2428,6 +2428,9 @@ a:hover{
 #hidesinglesupplier{
     display:none;
 }
+#hidebankrecord{
+    display:none;
+}
 .menucontent{
     color:rgb(107, 43, 8);
     font-size:15px;
@@ -3703,4 +3706,7 @@ a:hover{
     margin-right:30%;
     margin-left:30%;
     text-align: center;
+}
+#clickbank{
+    cursor:pointer;
 }

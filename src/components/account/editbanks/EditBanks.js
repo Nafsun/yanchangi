@@ -20,6 +20,8 @@ import theme from '../../functions/theme';
 import MenuItem from '@material-ui/core/MenuItem';
 import Naira from '../../functions/naira';
 import NoInternetConnection from '../../nointernetconnection/NoInternetConnection';
+import { useDispatch } from 'react-redux';
+import { BankTransactions } from '../../../actions';
 
 //All banks
 const ALLBANKS = gql`
@@ -76,6 +78,7 @@ function EditBanks(props) {
 
     const [deleteidGet, deleteidSet] = useState(null);
     const [deleteGetter, deleteSetter] = useState(false);
+    const dispatch = useDispatch();
 
     const sizeoflogo = {
         color: "white",
@@ -201,6 +204,11 @@ function EditBanks(props) {
         BankNameSet(event.target.value);
     }
 
+    const GotoBankRecord = (bankname, bankaccountnumber, bankaccountname) => {
+        dispatch(BankTransactions([bankname, bankaccountnumber, bankaccountname]));
+        document.getElementById("hidebankrecord").click();
+    }
+
     return (
         <div>
             {waitloadGet === false ?
@@ -239,9 +247,9 @@ function EditBanks(props) {
                                             </div>
                                         </CardContent>
                                         <CardContent>
-                                            <p className="describtionjobcontainer01"><span>Name:</span> {t.bankname}</p>
+                                            <p className="describtionjobcontainer01" id="clickbank" onClick={() => GotoBankRecord(t.bankname, t.bankaccountnumber, t.bankaccountname)}><span>Name:</span> {t.bankname}</p>
                                             <p className="describtionjobcontainer01"><span>Opening Balance:</span> {Naira(t.bankbalance)}</p>
-                                            <p className="describtionjobcontainer01"><span>Account Number:</span> {t.bankaccountnumber}</p>
+                                            <p className="describtionjobcontainer01" id="clickbank" onClick={() => GotoBankRecord(t.bankname, t.bankaccountnumber, t.bankaccountname)}><span>Account Number:</span> {t.bankaccountnumber}</p>
                                             <p className="describtionjobcontainer01"><span>Account Name:</span> {t.bankaccountname}</p>
                                             <p className="describtionjobcontainer01"><span>Actual Balance:</span> {Naira(t.bankamount)}</p>
                                             <div className="changefloat2"></div>

@@ -34,3 +34,10 @@ export const CustomerChangi = (s) => {
         payload: s
     };
 }
+
+export const BankTransactions = (s) => {
+    return {
+        type: 'BANKTRANSACTIONS',
+        payload: s
+    };
+}

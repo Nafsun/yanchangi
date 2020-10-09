@@ -18,6 +18,7 @@ import ListofCustomers from '../listofcustomers/ListofCustomers';
 import ListofSuppliers from '../listofsuppliers/ListofSuppliers';
 import SingleCustomer from '../singlecustomer/SingleCustomer';
 import SingleSupplier from '../singlesupplier/SingleSupplier';
+import BankRecord from '../bankrecord/BankRecord';
 
 function BottomRoute() {
 
@@ -78,6 +79,7 @@ function BottomRoute() {
                     exact strict to="/feedback" onClick={() => Location("/feedback")}>
                         <Feedback style={locGet === "/feedback" ? sizeoflogos2 : sizeoflogos}/>
                     </NavLink>
+
                 </div>
                     <NavLink
                     id="hidelogin"
@@ -150,6 +152,12 @@ function BottomRoute() {
                     exact strict onClick={() => Location("/nothing")} to="/supplier">
                         Single Supplier
                     </NavLink>
+
+                    <NavLink
+                    id="hidebankrecord"
+                    exact strict onClick={() => Location("/nothing")} to="/bankrecord">
+                        Bank Record
+                    </NavLink>
             </div>
             <Route path="/" exact component={Homes} />
             <Route path="/login" exact component={Login} />
@@ -165,6 +173,7 @@ function BottomRoute() {
             <Route path="/listofsuppliers" exact component={ListofSuppliers} />
             <Route path="/customer" exact component={SingleCustomer} />
             <Route path="/supplier" exact component={SingleSupplier} />
+            <Route path="/bankrecord" exact component={BankRecord} />
         </Router>
     </div>
     );
