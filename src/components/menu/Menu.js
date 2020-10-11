@@ -69,6 +69,13 @@ function Menu() {
                                 onClick={() => output("hidelistofsuppliers")}>
                                 List of Suppliers
                             </p>
+                            <p
+                                onMouseOut={() => changeOutStyleMenu("listofbanks", "rgb(107, 43, 8)")}
+                                onMouseOver={() => changeInStyleMenu("listofbanks", "black")}
+                                id="listofbanks"
+                                onClick={() => output("hidelistofbanks")}>
+                                List of Banks
+                            </p>
                         </div>
                     }
                     <p

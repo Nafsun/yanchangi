@@ -2431,6 +2431,9 @@ a:hover{
 #hidebankrecord{
     display:none;
 }
+#hidelistofbanks{
+    display:none;
+}
 .menucontent{
     color:rgb(107, 43, 8);
     font-size:15px;
@@ -3406,6 +3409,10 @@ a:hover{
     cursor:pointer;
 }
 #listofsuppliers{
+    color: rgb(107, 43, 8);
+    cursor:pointer;
+}
+#listofbanks{
     color: rgb(107, 43, 8);
     cursor:pointer;
 }

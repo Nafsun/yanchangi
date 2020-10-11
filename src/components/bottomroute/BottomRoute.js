@@ -16,6 +16,7 @@ import ForgotPassword from '../forgotpassword/ForgotPassword';
 import VerifyEmail from '../verifyemail/VerifyEmail';
 import ListofCustomers from '../listofcustomers/ListofCustomers';
 import ListofSuppliers from '../listofsuppliers/ListofSuppliers';
+import ListofBanks from '../listofbanks/ListofBanks';
 import SingleCustomer from '../singlecustomer/SingleCustomer';
 import SingleSupplier from '../singlesupplier/SingleSupplier';
 import BankRecord from '../bankrecord/BankRecord';
@@ -158,6 +159,12 @@ function BottomRoute() {
                     exact strict onClick={() => Location("/nothing")} to="/bankrecord">
                         Bank Record
                     </NavLink>
+
+                    <NavLink
+                    id="hidelistofbanks"
+                    exact strict onClick={() => Location("/nothing")} to="/banklist">
+                        Bank List
+                    </NavLink>
             </div>
             <Route path="/" exact component={Homes} />
             <Route path="/login" exact component={Login} />
@@ -174,6 +181,7 @@ function BottomRoute() {
             <Route path="/customer" exact component={SingleCustomer} />
             <Route path="/supplier" exact component={SingleSupplier} />
             <Route path="/bankrecord" exact component={BankRecord} />
+            <Route path="/banklist" exact component={ListofBanks} />
         </Router>
     </div>
     );
