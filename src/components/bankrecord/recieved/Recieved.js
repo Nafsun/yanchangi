@@ -211,7 +211,9 @@ function Recieved(props) {
                 PopBox("Record Successfully Deleted");
                 refetch();
                 totality.refetch();
-                props.refetch();
+                if (props.refetch !== undefined) {
+                    props.refetch();
+                }
             }
             nextClickSet(false);
         }).catch((e) => {
@@ -270,7 +272,17 @@ function Recieved(props) {
                 PopBox("Successfully Edited");
                 refetch();
                 totality.refetch();
-                props.refetch();
+                if (props.refetch !== undefined) {
+                    props.refetch();
+                }
+            }else if (data.recieveorpayupdate.error === "supplieraccountnodoesmatch") {
+                PopBoxerEnd(true); PopBox("The supplier account number does not match the name");
+            }else if (data.recieveorpayupdate.error === "customeraccountnodoesmatch") {
+                PopBoxerEnd(true); PopBox("The customer account number does not match the name");
+            }else if (data.recieveorpayupdate.error === "supplieraccountnodontexist") {
+                PopBoxerEnd(true); PopBox("Supplier Account number does not exist, please add the supplier to the 'ADD SUPPLIER/CUSTOMER' section");
+            }else if (data.recieveorpayupdate.error === "customeraccountnodontexist") {
+                PopBoxerEnd(true); PopBox("Customer Account number does not exist, please add the customer to the 'ADD SUPPLIER/CUSTOMER' section");
             }
         }).catch((e) => {
             MutationError(e.toString())
@@ -308,6 +320,8 @@ function Recieved(props) {
                 <CurrentLoading />
                 :
                 <div>
+                    {accessv.data.accessverify.editexpense === "yes" || accessv.data.accessverify.deleteexpense === "yes" ?
+                    <div>
                     <div className="workspace2">
                         <div className="jobcontainer2">
 
@@ -325,6 +339,8 @@ function Recieved(props) {
                                         <tr className="tablecolumdesign">
                                             <td>Amount</td>
                                             <td>Type</td>
+                                            <td>From/To</td>
+                                            <td>Account No</td>
                                             <td>Date and Time</td>
                                             {accessv.data.accessverify.editrecieveorpay === "yes" || accessv.data.accessverify.deleterecieveorpay === "yes" ?
                                                 <td>Edit</td>
@@ -337,6 +353,8 @@ function Recieved(props) {
                                         <tr className="tablecolumdesign2" key={t.id}>
                                             <td>{Naira(t.amount)}</td>
                                             <td>{t.recievedorpay}</td>
+                                            <td>{t.fromorto}</td>
+                                            <td>{t.accountnumber}</td>
                                             <td>{t.date}</td>
                                             {accessv.data.accessverify.editrecieveorpay === "yes" || accessv.data.accessverify.deleterecieveorpay === "yes" ?
                                                 <td><IconMenu
@@ -370,6 +388,10 @@ function Recieved(props) {
                             <p className="tablecolumdesign">Total Amount Recieved: {waitloadGet2 === false ? "" : <span className="tablecolumdesign3">{Naira(totality.data.totalityforpayorrecievedsinglebank.amountrecieved)}</span>}</p>
                             <p className="tablecolumdesign">Total Amount Pay: {waitloadGet2 === false ? "" : <span className="tablecolumdesign3">{Naira(totality.data.totalityforpayorrecievedsinglebank.amountpay)}</span>}</p>
                         </div>
+                    }
+                    </div>
+                    : 
+                        <p className="donthaveaccess">You don't have access to this section</p>
                     }
 
                     {PopBoxerStart ?

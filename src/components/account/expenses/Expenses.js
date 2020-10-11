@@ -38,9 +38,9 @@ function Expenses(props) {
     const [PopBoxerStart, PopBoxerEnd] = useState(false);
     const [PopBoxTextGet, PopBoxTextSet] = useState(null);
     const [waitloadGet2, waitloadSet2] = useState(false);
-    const [BankNameGet, BankNameSet] = useState("");
-    const [BankAccountNameGet, BankAccountNameSet] = useState("");
-    const [BankAccountNumberGet, BankAccountNumberSet] = useState("");
+    const [BankNameGet, BankNameSet] = useState(props.bankname !== undefined ? props.bankname : "");
+    const [BankAccountNameGet, BankAccountNameSet] = useState(props.bankaccountname !== undefined ? props.bankaccountname : "");
+    const [BankAccountNumberGet, BankAccountNumberSet] = useState(props.bankaccountnumber !== undefined ? props.bankaccountnumber : "");
 
     const banki = useQuery(GETALLAVAILABLEBANKS,
         {
@@ -79,6 +79,15 @@ function Expenses(props) {
                 PopBoxerEnd(true); PopBox("Successfully Saved");
                 if (props.refetcher !== undefined) {
                     props.refetcher();
+                }
+                if (props.refetch !== undefined) {
+                    props.refetch();
+                }
+                if (props.refetchtotal !== undefined) {
+                    props.refetchtotal();
+                }
+                if (props.totalityrefetch !== undefined) {
+                    props.totalityrefetch();
                 }
             }
         }).catch((e) => MutationError(e.toString()));

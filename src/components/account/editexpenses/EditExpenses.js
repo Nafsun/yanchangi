@@ -292,6 +292,8 @@ function EditExpenses(props) {
         BankAccountNameSet(event.target.value);
     }
 
+    //&#8358;
+
     return (
         <div>
             {waitloadGet === false ?
@@ -320,7 +322,7 @@ function EditExpenses(props) {
                         {waitloadGet2 === false ?
                             ""
                             :
-                            (data.expensesget.length === 0 && (starter2 > 0 || searchGet !== "") ? "" : <p className="totaleverything2">Total Expenses: <span>&#8358;{Naira(total.data.totalexpenses.totalamount)}</span></p>)
+                            (data.expensesget.length === 0 && (starter2 > 0 || searchGet !== "") ? "" : <p className="totaleverything2">Total Expenses: <span>{Naira(total.data.totalexpenses.totalamount)}</span></p>)
                         }
 
                         {data.expensesget.length === 0 && starter2 === 0 && nextClickGet === false && nextClickGet2 === false && searchGet === "" ? <p align="center" className="datef">You have not make any expense yet</p> : ""}
@@ -353,7 +355,7 @@ function EditExpenses(props) {
                                             </div>
                                         </CardContent>
                                         <CardContent>
-                                            <p className="describtionjobcontainer01"><span>Amount:</span> &#8358;{Naira(t.amount)}</p>
+                                            <p className="describtionjobcontainer01"><span>Amount:</span> {Naira(t.amount)}</p>
                                             <p className="describtionjobcontainer01"><span>Description:</span> {t.description}</p>
                                             <p className="describtionjobcontainer01"><span>Bank Name:</span> {t.bankname}</p>
                                             <p className="describtionjobcontainer01"><span>Bank Account Number:</span> {t.bankaccountnumber}</p>

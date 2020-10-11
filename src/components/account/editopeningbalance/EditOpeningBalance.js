@@ -299,7 +299,7 @@ function EditOpeningBalance(props) {
                         {waitloadGet2 === false ?
                             ""
                             :
-                            (data.openingbalanceget.length === 0 && (starter2 > 0 || searchGet !== "") ? "" : <p className="totaleverything2">Total Opening Balance: <span>&#8358;{Naira(total.data.totalopeningbalance.totalamount)}</span></p>)
+                            (data.openingbalanceget.length === 0 && (starter2 > 0 || searchGet !== "") ? "" : <p className="totaleverything2">Total Opening Balance: <span>{Naira(total.data.totalopeningbalance.totalamount)}</span></p>)
                         }
 
                         {data.openingbalanceget.length === 0 && starter2 === 0 && nextClickGet === false && nextClickGet2 === false && searchGet === "" ? <p align="center" className="datef">You have not put an opening balance for a customer or supplier yet</p> : ""}
