@@ -24,7 +24,6 @@ function BankRecord() {
 
     const userinfo = JSON.parse(localStorage.getItem("userinfo"));
     const BankTransactions = useSelector(s => s.BankTransactions);
-    console.log(BankTransactions);
     const [waitloadGet, waitloadSet] = useState(false);
 
     const [value, setValue] = useState(0);
