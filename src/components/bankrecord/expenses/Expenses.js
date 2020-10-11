@@ -301,7 +301,7 @@ function EditExpenses(props) {
                             (data.expensesgetsinglebank.length === 0 && (starter2 > 0) ? "" : <p className="totaleverything2">Total Expenses: <span>{Naira(total.data.totalexpensessinglebank.totalamount)}</span></p>)
                         }
 
-                        {data.expensesgetsinglebank.length === 0 && starter2 === 0 && nextClickGet === false && nextClickGet2 === false ? <p align="center" className="datef">You have not make any expense yet</p> : ""}
+                        {data.expensesgetsinglebank.length === 0 && starter2 === 0 && nextClickGet === false && nextClickGet2 === false ? <p align="center" className="datef">{BankTransactions[0]} have not make any expenses yet</p> : ""}
                         {data.expensesgetsinglebank.length === 0 && starter2 > 0 ? <p align="center" className="datef">No More Expenses</p> : ""}
                         {starter2 === 0 ? "" : <p onClick={() => PreviousBroadcast()} className="leftNav"><ArrowBack /></p>}
                         {data.expensesgetsinglebank.length === 0 ? "" : <p onClick={() => NextBroadcast()} className="rightNav"><ArrowForward /></p>}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import gql from 'graphql-tag';
 import { useMutation, useQuery } from 'react-apollo';
 import MutationError from '../../functions/mutationerror';
@@ -80,7 +80,6 @@ const RECEIVEORPAYUPDATE = gql`
 
 let starter2 = 0;
 let ender2 = 50;
-let accountno_save = "";
 
 function Recieved(props) {
 
@@ -115,14 +114,6 @@ function Recieved(props) {
         height: "1.2em",
         paddingTop: "8px"
     }
-
-    useEffect(() => { //convert then to initial values when you change page
-        if (BankTransactions[1] !== accountno_save) {
-            starter2 = 0;
-            ender2 = 50;
-            accountno_save = BankTransactions[1];
-        }
-    }, [BankTransactions]);
 
     const accessv = useQuery(ACCESSVERIFY,
         {
