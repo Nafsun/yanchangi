@@ -371,16 +371,16 @@ function EditOpeningBalance(props) {
                                             margin="normal" onChange={() => NumberCheck("amountid")} />
                                         <FormControl component="fieldset">
                                             <RadioGroup aria-label="chooseclient" name="chooseclient" value={chooseclientGet} onChange={(e) => chooseclientChanger(e)}>
-                                                <FormControlLabel value="supplier" control={<Radio />} label="Supplier" style={{ color: "rgb(107, 43, 8)" }} />
-                                                <FormControlLabel value="customer" control={<Radio />} label="Customer" style={{ color: "rgb(107, 43, 8)" }} />
+                                                <FormControlLabel value="supplier" control={<Radio />} label="Supplier" style={{ color: "rgb(107, 43, 8)" }} disabled />
+                                                <FormControlLabel value="customer" control={<Radio />} label="Customer" style={{ color: "rgb(107, 43, 8)" }} disabled />
                                             </RadioGroup>
                                         </FormControl>
                                         <TextField
                                             id="nameid" placeholder="Name" fullWidth={true}
-                                            margin="normal" defaultValue={nameGet} />
+                                            margin="normal" defaultValue={nameGet} disabled />
                                         <TextField
                                             id="accountnumberid" placeholder="Account No" fullWidth={true} defaultValue={accountnumberGet}
-                                            margin="normal" onChange={() => NumberCheck("accountnumberid")} />
+                                            margin="normal" onChange={() => NumberCheck("accountnumberid")} disabled />
                                         <Button
                                             fullWidth={true}
                                             onClick={() => EditingClientUpdate()}
