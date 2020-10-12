@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Recieved from './recieved/Recieved';
 import Expenses from './expenses/Expenses';
+import Reconciles from './reconcile/Reconciles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -92,6 +93,7 @@ function BankRecord() {
                         >
                             <Tab label="Recieved/Pay" {...a11yProps(0)} />
                             <Tab label="Expenses" {...a11yProps(1)} />
+                            <Tab label="Reconcile" {...a11yProps(2)} />
                         </Tabs>
                     </AppBar>
                     <TabPanel value={value} index={0}>
@@ -99,6 +101,9 @@ function BankRecord() {
                     </TabPanel>
                     <TabPanel value={value} index={1}>
                         <Expenses refetch={refetch} />
+                    </TabPanel>
+                    <TabPanel value={value} index={2}>
+                        <Reconciles refetch={refetch} />
                     </TabPanel>
                 </div>
                 <br />
