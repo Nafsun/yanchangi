@@ -26,6 +26,22 @@ import MenuItem from '@material-ui/core/MenuItem';
 import RecieveOrPay from '../../account/recieveorpay/RecieveOrPay';
 import NoInternetConnection from '../../nointernetconnection/NoInternetConnection';
 
+import printPageArea from '../../functions/printpagearea';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import {Transition} from '../../functions/panel';
+
+//All filtered recievedorpay
+const ALLFILTEREDRECIEVEDORPAY = gql` 
+    mutation allfilteredrecievedorpay($username: String, $fromdate: String, $todate: String, $bankname: String, $bankaccountnumber: String, $jwtauth: String){
+        allfilteredrecievedorpay(username: $username, fromdate: $fromdate, todate: $todate, bankname: $bankname, bankaccountnumber: $bankaccountnumber, jwtauth: $jwtauth){
+            id, username, amount, chooseclient, recievedorpay, fromorto, bankname, bankaccountnumber, bankaccountname, accountnumber, date
+        }
+    }
+`;
+
 //All banks the user register with
 const GETALLAVAILABLEBANKS = gql` 
     query getallavailablebanks($username: String, $jwtauth: String){
@@ -84,6 +100,7 @@ let ender2 = 50;
 function Recieved(props) {
 
     const userinfo = JSON.parse(localStorage.getItem("userinfo"));
+    const [allfilteredrecievedorpaymutation] = useMutation(ALLFILTEREDRECIEVEDORPAY);
     const [recieveorpayupdatemutation] = useMutation(RECEIVEORPAYUPDATE);
     const [deletepostmutation] = useMutation(RECEIVEORPAYDELETE);
     const [waitloadGet, waitloadSet] = useState(false);
@@ -95,6 +112,9 @@ function Recieved(props) {
     const [editGet, editSet] = useState(false);
     const BankTransactions = useSelector(s => s.BankTransactions);
 
+    const [filterGet, filterSet] = useState(false);
+    const [filterRecievedorPayGet, filterRecievedorPaySet] = useState([]);
+    
     const [idGet, idSet] = useState(null);
     const [amountGet, amountSet] = useState(null);
     const [chooseclientGet, chooseclientSet] = useState(null);
@@ -305,12 +325,65 @@ function Recieved(props) {
         chooseclientSet(event.target.value);
     }
 
+    const HideFilter = () => {
+        filterSet(false);
+    }
+
+    const OpenFilter = () => {
+        filterSet(true);
+    }
+
+    const FilterNow = () => {
+        let fromdate = document.getElementById("fromdateid");
+        let todate = document.getElementById("todateid");
+
+        if (fromdate.value === "") { PopBoxerEnd(true); PopBox("From Date cannot be empty"); return false; }
+        if (todate.value === "") { PopBoxerEnd(true); PopBox("To Date cannot be empty"); return false; }
+
+        let u = userinfo.loginAccount.username; // username getter
+        let j = userinfo.loginAccount.token; // token getter
+
+        nextClickSet(true);
+        filterSet(false);
+
+        allfilteredrecievedorpaymutation({ variables: { username: u, fromdate: fromdate.value, todate: todate.value, bankname: BankTransactions[0], bankaccountnumber: BankTransactions[1], jwtauth: j } }).then(({ data }) => {
+            nextClickSet(false);
+            filterRecievedorPaySet(data.allfilteredrecievedorpay);
+            printPageArea('hidefilter');
+        }).catch((e) => MutationError(e.toString()));
+    }
+
     return (
         <div>
             {waitloadGet === false ?
                 <CurrentLoading />
                 :
                 <div>
+                    <div id="hidefilter">
+                        <p className="loginjobs7">{`${BankTransactions[0]} (${BankTransactions[1]})`}</p>
+                        <table cellSpacing={10} align="center">
+                                <thead>
+                                    <tr className="tablecolumdesign">
+                                        <td>Amount</td>
+                                        <td>Type</td>
+                                        <td>From/To</td>
+                                        <td>Account No</td>
+                                        <td>Date and Time</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {filterRecievedorPayGet.map((t) => (
+                                            <tr className="tablecolumdesign2" key={t.id}>
+                                                <td>{Naira(t.amount)}</td>
+                                                <td>{t.recievedorpay}</td>
+                                                <td>{t.fromorto}</td>
+                                                <td>{t.accountnumber}</td>
+                                                <td>{t.date}</td>
+                                            </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                    </div>
                     {accessv.data.accessverify.editexpense === "yes" || accessv.data.accessverify.deleteexpense === "yes" ?
                     <div>
                     <div className="workspace2">
@@ -324,6 +397,7 @@ function Recieved(props) {
                             {data.recieveorpaygetsinglebank.length === 0 ? "" : <p onClick={() => NextBroadcast()} className="rightNav"><ArrowForward /></p>}
                             <div className="changefloat2"></div>
 
+                            <div className="loginspace" id="printableArea">
                             <table cellSpacing={10} align="center">
                                 {data.recieveorpaygetsinglebank.length === 0 && (starter2 > 0 || starter2 === 0) ? <thead></thead> :
                                     <thead>
@@ -367,11 +441,13 @@ function Recieved(props) {
                                     ))}
                                 </tbody>
                             </table>
+                            </div>
                         </div>
                         <div className="changefloat2"></div>
                         {starter2 === 0 ? "" : <p onClick={() => PreviousBroadcast()} className="leftNav"><ArrowBack /></p>}
                         {data.recieveorpaygetsinglebank.length === 0 ? "" : <p onClick={() => NextBroadcast()} className="rightNav"><ArrowForward /></p>}
                         <div className="changefloat2"></div>
+                        <p className="printer"><span onClick={() => printPageArea('printableArea')}>Print</span> | <span onClick={() => OpenFilter()}>Filter</span></p>
                     </div>
 
                     {data.recieveorpaygetsinglebank.length === 0 && (starter2 > 0 || starter2 === 0) ? "" :
@@ -385,6 +461,48 @@ function Recieved(props) {
                         <p className="donthaveaccess">You don't have access to this section</p>
                     }
 
+                    {filterGet === true ?
+                        <Dialog
+                            open={true}
+                            TransitionComponent={Transition}
+                            onBackdropClick={() => HideFilter()}
+                            aria-labelledby="alert-dialog-slide-title"
+                            aria-describedby="alert-dialog-slide-description"
+                        >
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-slide-description">
+                                    You can filter from a specific date to another date
+                                </DialogContentText>
+                                <ThemeProvider theme={theme}>
+                                <TextField
+                                    id="fromdateid"
+                                    label="From Date"
+                                    margin="normal"
+                                    variant="outlined"
+                                    fullWidth={true}
+                                    type="date"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                />
+                                <TextField
+                                    id="todateid"
+                                    label="To Date"
+                                    margin="normal"
+                                    variant="outlined"
+                                    fullWidth={true}
+                                    type="date"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                />
+                                </ThemeProvider>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={() => FilterNow()} style={{color: "rgb(107, 43, 8)"}}>Filter</Button>
+                            </DialogActions>
+                        </Dialog>
+                    : ""}
                     {PopBoxerStart ?
                         <DialogInfo PopBoxTextGet={PopBoxTextGet} PopBoxClosed={PopBoxClosed} />
                         : ""}

@@ -3717,3 +3717,16 @@ a:hover{
 #clickbank{
     cursor:pointer;
 }
+.printer{
+    cursor:pointer;
+    font-size:16px;
+    font-family: sans-serif;
+    color: rgb(107, 43, 8);
+    text-align: right;
+}
+.printer span:hover{
+    color: rgb(197, 34, 13);
+}
+#hidefilter{
+    display: none;
+}

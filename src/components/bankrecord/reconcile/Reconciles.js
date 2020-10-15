@@ -27,6 +27,22 @@ import FormLabel from '@material-ui/core/FormLabel';
 import Reconcile from '../../account/reconcile/Reconcile';
 import { useSelector } from 'react-redux';
 
+import printPageArea from '../../functions/printpagearea';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import {Transition} from '../../functions/panel';
+
+//All filtered reconcile
+const ALLFILTEREDRECONCILE = gql` 
+    mutation allfilteredreconcile($username: String, $fromdate: String, $todate: String, $bankname: String, $bankaccountnumber: String, $jwtauth: String){
+        allfilteredreconcile(username: $username, fromdate: $fromdate, todate: $todate, bankname: $bankname, bankaccountnumber: $bankaccountnumber, jwtauth: $jwtauth){
+            id, username, description, amount, sendorrecieved, from, bankname, bankaccountnumber, bankaccountname, to, bankname2, bankaccountnumber2, bankaccountname2, date
+        }
+    }
+`;
+
 //All banks the user register with
 const GETALLAVAILABLEBANKS = gql` 
     query getallavailablebanks($username: String, $jwtauth: String){
@@ -77,6 +93,7 @@ let ender2 = parseInt(process.env.REACT_APP_COUNT);
 function Reconciles(props) {
 
     const userinfo = JSON.parse(localStorage.getItem("userinfo"));
+    const [allfilteredreconcilemutation] = useMutation(ALLFILTEREDRECONCILE);
     const [reconcileupdatemutation] = useMutation(RECONCILEUPDATE);
     const [deletepostmutation] = useMutation(RECONCILEDELETE);
     const [waitloadGet, waitloadSet] = useState(false);
@@ -87,6 +104,9 @@ function Reconciles(props) {
     const [PopBoxTextGet, PopBoxTextSet] = useState(null);
     const [editGet, editSet] = useState(false);
 
+    const [filterGet, filterSet] = useState(false);
+    const [filterReconcileGet, filterReconcileSet] = useState([]);
+    
     const [idGet, idSet] = useState(null);
     const [amountGet, amountSet] = useState(null);
     const [descriptionGet, descriptionSet] = useState(null);
@@ -370,12 +390,79 @@ function Reconciles(props) {
         setTransactionType(event.target.value);
     }
 
+    const HideFilter = () => {
+        filterSet(false);
+    }
+
+    const OpenFilter = () => {
+        filterSet(true);
+    }
+
+    const FilterNow = () => {
+        let fromdate = document.getElementById("fromdateid");
+        let todate = document.getElementById("todateid");
+
+        if (fromdate.value === "") { PopBoxerEnd(true); PopBox("From Date cannot be empty"); return false; }
+        if (todate.value === "") { PopBoxerEnd(true); PopBox("To Date cannot be empty"); return false; }
+
+        let u = userinfo.loginAccount.username; // username getter
+        let j = userinfo.loginAccount.token; // token getter
+
+        nextClickSet(true);
+        filterSet(false);
+
+        allfilteredreconcilemutation({ variables: { username: u, fromdate: fromdate.value, todate: todate.value, bankname: BankTransactions[0], bankaccountnumber: BankTransactions[1], jwtauth: j } }).then(({ data }) => {
+            nextClickSet(false);
+            filterReconcileSet(data.allfilteredreconcile);
+            printPageArea('hidefilter');
+        }).catch((e) => MutationError(e.toString()));
+    }
+
     return (
         <div>
             {waitloadGet === false ?
                 <CurrentLoading />
                 :
                 <div className="workspace2">
+                    <div id="hidefilter">
+                        <p className="loginjobs7">{`${BankTransactions[0]} (${BankTransactions[1]})`}</p>
+                        <table cellSpacing={10} align="center">
+                                <thead>
+                                    <tr className="tablecolumdesign">
+                                        <td>Amount</td>
+                                        <td>Description</td>
+                                        <td>Type</td>
+                                        <td>From</td>
+                                        <td>Bank Name</td>
+                                        <td>Bank Account Number</td>
+                                        <td>Bank Account Name</td>
+                                        <td>To</td>
+                                        <td>Bank Name</td>
+                                        <td>Bank Account Number</td>
+                                        <td>Bank Account Name</td>
+                                        <td>Date and Time</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {filterReconcileGet.map((t) => (
+                                            <tr className="tablecolumdesign2" key={t.id}>
+                                                <td>{Naira(t.amount)}</td>
+                                                <td>{t.description}</td>
+                                                <td>{t.sendorrecieved}</td>
+                                                <td>{t.from}</td>
+                                                <td>{t.bankname}</td>
+                                                <td>{t.bankaccountnumber}</td>
+                                                <td>{t.bankaccountname !== "" && t.bankaccountname !== "no" ? t.bankaccountname : ""}</td>
+                                                <td>{t.to}</td>
+                                                <td>{t.bankname2}</td>
+                                                <td>{t.bankaccountnumber2}</td>
+                                                <td>{t.bankaccountname2 !== "" && t.bankaccountname2 !== "no" ? t.bankaccountname2 : ""}</td>
+                                                <td>{t.date}</td>
+                                            </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                    </div>
                     {accessv.data.accessverify.editreconcile === "yes" || accessv.data.accessverify.deletereconcile === "yes" ?
                     <div className="jobcontainer2">
 
@@ -388,7 +475,7 @@ function Reconciles(props) {
                         {data.reconcilegetsinglebank.length === 0 ? "" : <p onClick={() => NextBroadcast()} className="rightNav"><ArrowForward /></p>}
                         <div className="changefloat2"></div>
 
-                        <div className="loginspace">
+                        <div className="loginspace" id="printableArea">
                             <table cellSpacing={10} align="center">
                                 {data.reconcilegetsinglebank.length === 0 && (starter2 > 0 || starter2 === 0) ? <thead></thead> :
                                     <thead>
@@ -451,10 +538,54 @@ function Reconciles(props) {
                         {starter2 === 0 ? "" : <p onClick={() => PreviousBroadcast()} className="leftNav"><ArrowBack /></p>}
                         {data.reconcilegetsinglebank.length === 0 ? "" : <p onClick={() => NextBroadcast()} className="rightNav"><ArrowForward /></p>}
                         <div className="changefloat2"></div>
+                        <p className="printer"><span onClick={() => printPageArea('printableArea')}>Print</span> | <span onClick={() => OpenFilter()}>Filter</span></p>
                     </div>
                     : 
                         <p className="donthaveaccess">You don't have access to this section</p>
                     }
+
+                    {filterGet === true ?
+                        <Dialog
+                            open={true}
+                            TransitionComponent={Transition}
+                            onBackdropClick={() => HideFilter()}
+                            aria-labelledby="alert-dialog-slide-title"
+                            aria-describedby="alert-dialog-slide-description"
+                        >
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-slide-description">
+                                    You can filter from a specific date to another date
+                                </DialogContentText>
+                                <ThemeProvider theme={theme}>
+                                <TextField
+                                    id="fromdateid"
+                                    label="From Date"
+                                    margin="normal"
+                                    variant="outlined"
+                                    fullWidth={true}
+                                    type="date"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                />
+                                <TextField
+                                    id="todateid"
+                                    label="To Date"
+                                    margin="normal"
+                                    variant="outlined"
+                                    fullWidth={true}
+                                    type="date"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                />
+                                </ThemeProvider>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={() => FilterNow()} style={{color: "rgb(107, 43, 8)"}}>Filter</Button>
+                            </DialogActions>
+                        </Dialog>
+                    : ""}
                     {PopBoxerStart ?
                         <DialogInfo PopBoxTextGet={PopBoxTextGet} PopBoxClosed={PopBoxClosed} />
                         : ""}
