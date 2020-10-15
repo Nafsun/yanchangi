@@ -21,6 +21,22 @@ import Naira from '../../functions/naira';
 import Transaction from '../../account/transaction/Transaction';
 import NoInternetConnection from '../../nointernetconnection/NoInternetConnection';
 
+import printPageArea from '../../functions/printpagearea';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import { Transition } from '../../functions/panel';
+
+//All filtered buy and sell customer
+const ALLFILTEREDBUYANDSELLSUPPLIER = gql` 
+    mutation allfilteredbuyandsellsupplier($username: String, $fromdate: String, $todate: String, $supplier: String, $supplieraccountno: String, $jwtauth: String){
+        allfilteredbuyandsellsupplier(username: $username, fromdate: $fromdate, todate: $todate, supplier: $supplier, supplieraccountno: $supplieraccountno, jwtauth: $jwtauth){
+            id, username, amount1, rate1, ngn1, supplier, supplieraccountno, customer, customeraccountno, rate2, ngn2, profit, date
+        }
+    }
+`;
+
 const TOTALITYFORSUPPLIER = gql`
     query totalityforsupplier($username: String, $supplier: String, $supplieraccountno: String, $jwtauth: String){
         totalityforsupplier(username: $username, supplier: $supplier, supplieraccountno: $supplieraccountno, jwtauth: $jwtauth){
@@ -71,6 +87,7 @@ let accountno_save = "";
 function AllInfo(props) {
 
     const userinfo = JSON.parse(localStorage.getItem("userinfo"));
+    const [allfilteredbuyandsellsuppliermutation] = useMutation(ALLFILTEREDBUYANDSELLSUPPLIER);
     const [buyandsellupdatemutation] = useMutation(BUYANDSELLUPDATE);
     const [deletepostmutation] = useMutation(BUYANDSELLDELETE);
     const SupplierChangi = useSelector(s => s.SupplierChangi);
@@ -81,6 +98,9 @@ function AllInfo(props) {
     const [PopBoxerStart, PopBoxerEnd] = useState(false);
     const [PopBoxTextGet, PopBoxTextSet] = useState(null);
     const [editGet, editSet] = useState(false);
+
+    const [filterGet, filterSet] = useState(false);
+    const [filterBuyandSellGet, filterBuyandSellSet] = useState([]);
 
     const [idGet, idSet] = useState(null);
     const [amount1Get, amount1Set] = useState(null);
@@ -326,12 +346,73 @@ function AllInfo(props) {
         NGN2Func();
     }
 
+    const HideFilter = () => {
+        filterSet(false);
+    }
+
+    const OpenFilter = () => {
+        filterSet(true);
+    }
+
+    const FilterNow = () => {
+        let fromdate = document.getElementById("fromdateid");
+        let todate = document.getElementById("todateid");
+
+        if (fromdate.value === "") { PopBoxerEnd(true); PopBox("From Date cannot be empty"); return false; }
+        if (todate.value === "") { PopBoxerEnd(true); PopBox("To Date cannot be empty"); return false; }
+
+        let u = userinfo.loginAccount.username; // username getter
+        let j = userinfo.loginAccount.token; // token getter
+
+        nextClickSet(true);
+        filterSet(false);
+
+        allfilteredbuyandsellsuppliermutation({ variables: { username: u, fromdate: fromdate.value, todate: todate.value, supplier: SupplierChangi[0], supplieraccountno: SupplierChangi[1], jwtauth: j } }).then(({ data }) => {
+            nextClickSet(false);
+            filterBuyandSellSet(data.allfilteredbuyandsellsupplier);
+            printPageArea('hidefilter');
+        }).catch((e) => MutationError(e.toString()));
+    }
+
     return (
         <div>
             {waitloadGet === false ?
                 <CurrentLoading />
                 :
                 <div>
+                    <div id="hidefilter">
+                        <p className="loginjobs7">{`${SupplierChangi[0]} (${SupplierChangi[1]})`}</p>
+                        <table cellSpacing={10} align="center">
+                            <thead>
+                                <tr className="tablecolumdesign">
+                                    <td>Supplied Amount</td>
+                                    <td>Supplier Rate</td>
+                                    <td>Supplier NGN</td>
+                                    <td>Customer Rate</td>
+                                    <td>Customer NGN</td>
+                                    <td>Customer Name</td>
+                                    <td>Customer Account No</td>
+                                    <td>Profit/Loss</td>
+                                    <td>Date and Time</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {filterBuyandSellGet.map((t) => (
+                                    <tr className="tablecolumdesign2" key={t.id}>
+                                        <td>{Naira(t.amount1)}</td>
+                                        <td>{t.rate1}</td>
+                                        <td>{Naira(t.ngn1)}</td>
+                                        <td>{t.rate2}</td>
+                                        <td>{Naira(t.ngn2)}</td>
+                                        <td>{t.customer}</td>
+                                        <td>{t.customeraccountno}</td>
+                                        <td>{Naira(t.profit)}</td>
+                                        <td>{t.date}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                     <div className="workspace2">
                         <div className="jobcontainer2">
 
@@ -343,6 +424,7 @@ function AllInfo(props) {
                             {data.buyandsellgetsupplier.length === 0 ? "" : <p onClick={() => NextBroadcast()} className="rightNav"><ArrowForward /></p>}
                             <div className="changefloat2"></div>
 
+                            <div className="loginspace" id="printableArea">
                             <table align="center">
                                 {data.buyandsellgetsupplier.length === 0 && (starter2 > 0 || starter2 === 0) ? <thead></thead> :
                                     <thead>
@@ -358,7 +440,7 @@ function AllInfo(props) {
                                             <td>Date and Time</td>
                                             {accessv.data.accessverify.edittransaction === "yes" || accessv.data.accessverify.deletetransaction === "yes" ?
                                                 <td>Edit</td>
-                                            : ""}
+                                                : ""}
                                         </tr>
                                     </thead>
                                 }
@@ -375,21 +457,21 @@ function AllInfo(props) {
                                             <td>{Naira(t.profit)}</td>
                                             <td>{t.date}</td>
                                             {accessv.data.accessverify.edittransaction === "yes" || accessv.data.accessverify.deletetransaction === "yes" ?
-                                            <td><IconMenu
-                                                iconButtonElement={<IconButton><MoreVert style={{ color: "rgb(107, 43, 8)" }}></MoreVert></IconButton>}
-                                                useLayerForClickAway={true}
-                                                targetOrigin={{ vertical: "bottom", horizontal: "left" }}
-                                            >
-                                                <List>
-                                                {accessv.data.accessverify.deletetransaction === "yes" ?
-                                                    <ListItem onClick={() => BringOutDelete(t.id)}>Delete</ListItem>
+                                                <td><IconMenu
+                                                    iconButtonElement={<IconButton><MoreVert style={{ color: "rgb(107, 43, 8)" }}></MoreVert></IconButton>}
+                                                    useLayerForClickAway={true}
+                                                    targetOrigin={{ vertical: "bottom", horizontal: "left" }}
+                                                >
+                                                    <List>
+                                                        {accessv.data.accessverify.deletetransaction === "yes" ?
+                                                            <ListItem onClick={() => BringOutDelete(t.id)}>Delete</ListItem>
+                                                            : ""}
+                                                        {accessv.data.accessverify.edittransaction === "yes" ?
+                                                            <ListItem onClick={() => OpenEdit(t.id, t.amount1, t.rate1, t.ngn1, t.supplier, t.supplieraccountno, t.customer, t.customeraccountno, t.rate2, t.ngn2, t.profit)}>Edit</ListItem>
+                                                            : ""}
+                                                    </List>
+                                                </IconMenu></td>
                                                 : ""}
-                                                {accessv.data.accessverify.edittransaction === "yes" ?
-                                                    <ListItem onClick={() => OpenEdit(t.id, t.amount1, t.rate1, t.ngn1, t.supplier, t.supplieraccountno, t.customer, t.customeraccountno, t.rate2, t.ngn2, t.profit)}>Edit</ListItem>
-                                                : ""}
-                                                </List>
-                                            </IconMenu></td>
-                                            : ""}
                                         </tr>
                                     ))}
                                     {data.buyandsellgetsupplier.length === 0 && (starter2 > 0 || starter2 === 0) ? <tr className="tablecolumdesign3"></tr> :
@@ -407,13 +489,57 @@ function AllInfo(props) {
                                     }
                                 </tbody>
                             </table>
+                            </div>
                         </div>
                         <div className="changefloat2"></div>
                         {starter2 === 0 ? "" : <p onClick={() => PreviousBroadcast()} className="leftNav"><ArrowBack /></p>}
                         {data.buyandsellgetsupplier.length === 0 ? "" : <p onClick={() => NextBroadcast()} className="rightNav"><ArrowForward /></p>}
                         <div className="changefloat2"></div>
+                        <p className="printer"><span onClick={() => printPageArea('printableArea')}>Print</span> | <span onClick={() => OpenFilter()}>Filter</span></p>
                     </div>
-
+                    
+                    {filterGet === true ?
+                        <Dialog
+                            open={true}
+                            TransitionComponent={Transition}
+                            onBackdropClick={() => HideFilter()}
+                            aria-labelledby="alert-dialog-slide-title"
+                            aria-describedby="alert-dialog-slide-description"
+                        >
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-slide-description">
+                                    You can filter from a specific date to another date
+                                </DialogContentText>
+                                <ThemeProvider theme={theme}>
+                                    <TextField
+                                        id="fromdateid"
+                                        label="From Date"
+                                        margin="normal"
+                                        variant="outlined"
+                                        fullWidth={true}
+                                        type="date"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    />
+                                    <TextField
+                                        id="todateid"
+                                        label="To Date"
+                                        margin="normal"
+                                        variant="outlined"
+                                        fullWidth={true}
+                                        type="date"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    />
+                                </ThemeProvider>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={() => FilterNow()} style={{ color: "rgb(107, 43, 8)" }}>Filter</Button>
+                            </DialogActions>
+                        </Dialog>
+                        : ""}
                     {PopBoxerStart ?
                         <DialogInfo PopBoxTextGet={PopBoxTextGet} PopBoxClosed={PopBoxClosed} />
                         : ""}

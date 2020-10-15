@@ -26,6 +26,22 @@ import MenuItem from '@material-ui/core/MenuItem';
 import RecieveOrPay from '../../account/recieveorpay/RecieveOrPay';
 import NoInternetConnection from '../../nointernetconnection/NoInternetConnection';
 
+import printPageArea from '../../functions/printpagearea';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import { Transition } from '../../functions/panel';
+
+//All filtered recieved or pay supplier
+const ALLFILTEREDRECIEVEDORPAYSUPPLIER = gql` 
+    mutation allfilteredrecieveorpaysupplier($username: String, $fromdate: String, $todate: String, $supplier: String, $supplieraccountno: String, $jwtauth: String){
+        allfilteredrecieveorpaysupplier(username: $username, fromdate: $fromdate, todate: $todate, supplier: $supplier, supplieraccountno: $supplieraccountno, jwtauth: $jwtauth){
+            id, username, amount, chooseclient, recievedorpay, fromorto, bankname, bankaccountnumber, bankaccountname, accountnumber, date
+        }
+    }
+`;
+
 //All banks the user register with
 const GETALLAVAILABLEBANKS = gql` 
     query getallavailablebanks($username: String, $jwtauth: String){
@@ -85,6 +101,7 @@ let accountno_save = "";
 function Recieved(props) {
 
     const userinfo = JSON.parse(localStorage.getItem("userinfo"));
+    const [allfilteredrecieveorpaysuppliermutation] = useMutation(ALLFILTEREDRECIEVEDORPAYSUPPLIER);
     const [recieveorpayupdatemutation] = useMutation(RECEIVEORPAYUPDATE);
     const [deletepostmutation] = useMutation(RECEIVEORPAYDELETE);
     const [waitloadGet, waitloadSet] = useState(false);
@@ -95,6 +112,9 @@ function Recieved(props) {
     const [PopBoxTextGet, PopBoxTextSet] = useState(null);
     const [editGet, editSet] = useState(false);
     const SupplierChangi = useSelector(s => s.SupplierChangi);
+
+    const [filterGet, filterSet] = useState(false);
+    const [filterRecievedOrPayGet, filterRecievedOrPaySet] = useState([]);
 
     const [idGet, idSet] = useState(null);
     const [amountGet, amountSet] = useState(null);
@@ -298,12 +318,67 @@ function Recieved(props) {
         chooseclientSet(event.target.value);
     }
 
+    const HideFilter = () => {
+        filterSet(false);
+    }
+
+    const OpenFilter = () => {
+        filterSet(true);
+    }
+
+    const FilterNow = () => {
+        let fromdate = document.getElementById("fromdateid");
+        let todate = document.getElementById("todateid");
+
+        if (fromdate.value === "") { PopBoxerEnd(true); PopBox("From Date cannot be empty"); return false; }
+        if (todate.value === "") { PopBoxerEnd(true); PopBox("To Date cannot be empty"); return false; }
+
+        let u = userinfo.loginAccount.username; // username getter
+        let j = userinfo.loginAccount.token; // token getter
+
+        nextClickSet(true);
+        filterSet(false);
+
+        allfilteredrecieveorpaysuppliermutation({ variables: { username: u, fromdate: fromdate.value, todate: todate.value, supplier: SupplierChangi[0], supplieraccountno: SupplierChangi[1], jwtauth: j } }).then(({ data }) => {
+            nextClickSet(false);
+            filterRecievedOrPaySet(data.allfilteredrecieveorpaysupplier);
+            printPageArea('hidefilter');
+        }).catch((e) => MutationError(e.toString()));
+    }
+
     return (
         <div>
             {waitloadGet === false ?
                 <CurrentLoading />
                 :
                 <div>
+                    <div id="hidefilter">
+                        <p className="loginjobs7">{`${SupplierChangi[0]} (${SupplierChangi[1]})`}</p>
+                        <table cellSpacing={10} align="center">
+                            <thead>
+                                <tr className="tablecolumdesign">
+                                    <td>Amount</td>
+                                    <td>Type</td>
+                                    <td>Bank Name</td>
+                                    <td>Bank Account Number</td>
+                                    <td>Bank Account Name</td>
+                                    <td>Date and Time</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {filterRecievedOrPayGet.map((t) => (
+                                    <tr className="tablecolumdesign2" key={t.id}>
+                                        <td>{Naira(t.amount)}</td>
+                                        <td>{t.recievedorpay}</td>
+                                        <td>{t.bankname}</td>
+                                        <td>{t.bankaccountnumber}</td>
+                                        <td>{t.bankaccountname}</td>
+                                        <td>{t.date}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                     <div className="workspace2">
                         <div className="jobcontainer2">
 
@@ -315,56 +390,59 @@ function Recieved(props) {
                             {data.recieveorpaygetsupplier.length === 0 ? "" : <p onClick={() => NextBroadcast()} className="rightNav"><ArrowForward /></p>}
                             <div className="changefloat2"></div>
 
-                            <table cellSpacing={10} align="center">
-                                {data.recieveorpaygetsupplier.length === 0 && (starter2 > 0 || starter2 === 0) ? <thead></thead> :
-                                    <thead>
-                                        <tr className="tablecolumdesign">
-                                            <td>Amount</td>
-                                            <td>Type</td>
-                                            <td>Bank Name</td>
-                                            <td>Bank Account Number</td>
-                                            <td>Bank Account Name</td>
-                                            <td>Date and Time</td>
-                                            {accessv.data.accessverify.editrecieveorpay === "yes" || accessv.data.accessverify.deleterecieveorpay === "yes" ?
-                                                <td>Edit</td>
-                                                : ""}
-                                        </tr>
-                                    </thead>
-                                }
-                                <tbody>
-                                    {data.recieveorpaygetsupplier.map((t) => (
-                                        <tr className="tablecolumdesign2" key={t.id}>
-                                            <td>{Naira(t.amount)}</td>
-                                            <td>{t.recievedorpay}</td>
-                                            <td>{t.bankname}</td>
-                                            <td>{t.bankaccountnumber}</td>
-                                            <td>{t.bankaccountname}</td>
-                                            <td>{t.date}</td>
-                                            {accessv.data.accessverify.editrecieveorpay === "yes" || accessv.data.accessverify.deleterecieveorpay === "yes" ?
-                                                <td><IconMenu
-                                                    iconButtonElement={<IconButton><MoreVert style={{ color: "rgb(107, 43, 8)" }}></MoreVert></IconButton>}
-                                                    useLayerForClickAway={true}
-                                                    targetOrigin={{ vertical: "bottom", horizontal: "left" }}
-                                                >
-                                                    <List>
-                                                        {accessv.data.accessverify.deleterecieveorpay === "yes" ?
-                                                            <ListItem onClick={() => BringOutDelete(t.id)}>Delete</ListItem>
-                                                            : ""}
-                                                        {accessv.data.accessverify.editrecieveorpay === "yes" ?
-                                                            <ListItem onClick={() => OpenEdit(t.id, t.amount, t.chooseclient, t.recievedorpay, t.fromorto, t.bankname, t.bankaccountnumber, t.bankaccountname, t.accountnumber)}>Edit</ListItem>
-                                                            : ""}
-                                                    </List>
-                                                </IconMenu></td>
-                                                : ""}
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                            <div className="loginspace" id="printableArea">
+                                <table cellSpacing={10} align="center">
+                                    {data.recieveorpaygetsupplier.length === 0 && (starter2 > 0 || starter2 === 0) ? <thead></thead> :
+                                        <thead>
+                                            <tr className="tablecolumdesign">
+                                                <td>Amount</td>
+                                                <td>Type</td>
+                                                <td>Bank Name</td>
+                                                <td>Bank Account Number</td>
+                                                <td>Bank Account Name</td>
+                                                <td>Date and Time</td>
+                                                {accessv.data.accessverify.editrecieveorpay === "yes" || accessv.data.accessverify.deleterecieveorpay === "yes" ?
+                                                    <td>Edit</td>
+                                                    : ""}
+                                            </tr>
+                                        </thead>
+                                    }
+                                    <tbody>
+                                        {data.recieveorpaygetsupplier.map((t) => (
+                                            <tr className="tablecolumdesign2" key={t.id}>
+                                                <td>{Naira(t.amount)}</td>
+                                                <td>{t.recievedorpay}</td>
+                                                <td>{t.bankname}</td>
+                                                <td>{t.bankaccountnumber}</td>
+                                                <td>{t.bankaccountname}</td>
+                                                <td>{t.date}</td>
+                                                {accessv.data.accessverify.editrecieveorpay === "yes" || accessv.data.accessverify.deleterecieveorpay === "yes" ?
+                                                    <td><IconMenu
+                                                        iconButtonElement={<IconButton><MoreVert style={{ color: "rgb(107, 43, 8)" }}></MoreVert></IconButton>}
+                                                        useLayerForClickAway={true}
+                                                        targetOrigin={{ vertical: "bottom", horizontal: "left" }}
+                                                    >
+                                                        <List>
+                                                            {accessv.data.accessverify.deleterecieveorpay === "yes" ?
+                                                                <ListItem onClick={() => BringOutDelete(t.id)}>Delete</ListItem>
+                                                                : ""}
+                                                            {accessv.data.accessverify.editrecieveorpay === "yes" ?
+                                                                <ListItem onClick={() => OpenEdit(t.id, t.amount, t.chooseclient, t.recievedorpay, t.fromorto, t.bankname, t.bankaccountnumber, t.bankaccountname, t.accountnumber)}>Edit</ListItem>
+                                                                : ""}
+                                                        </List>
+                                                    </IconMenu></td>
+                                                    : ""}
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <div className="changefloat2"></div>
                         {starter2 === 0 ? "" : <p onClick={() => PreviousBroadcast()} className="leftNav"><ArrowBack /></p>}
                         {data.recieveorpaygetsupplier.length === 0 ? "" : <p onClick={() => NextBroadcast()} className="rightNav"><ArrowForward /></p>}
                         <div className="changefloat2"></div>
+                        <p className="printer"><span onClick={() => printPageArea('printableArea')}>Print</span> | <span onClick={() => OpenFilter()}>Filter</span></p>
                     </div>
 
                     {data.recieveorpaygetsupplier.length === 0 && (starter2 > 0 || starter2 === 0) ? "" :
@@ -374,6 +452,48 @@ function Recieved(props) {
                         </div>
                     }
 
+                    {filterGet === true ?
+                        <Dialog
+                            open={true}
+                            TransitionComponent={Transition}
+                            onBackdropClick={() => HideFilter()}
+                            aria-labelledby="alert-dialog-slide-title"
+                            aria-describedby="alert-dialog-slide-description"
+                        >
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-slide-description">
+                                    You can filter from a specific date to another date
+                                </DialogContentText>
+                                <ThemeProvider theme={theme}>
+                                    <TextField
+                                        id="fromdateid"
+                                        label="From Date"
+                                        margin="normal"
+                                        variant="outlined"
+                                        fullWidth={true}
+                                        type="date"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    />
+                                    <TextField
+                                        id="todateid"
+                                        label="To Date"
+                                        margin="normal"
+                                        variant="outlined"
+                                        fullWidth={true}
+                                        type="date"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    />
+                                </ThemeProvider>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={() => FilterNow()} style={{ color: "rgb(107, 43, 8)" }}>Filter</Button>
+                            </DialogActions>
+                        </Dialog>
+                        : ""}
                     {PopBoxerStart ?
                         <DialogInfo PopBoxTextGet={PopBoxTextGet} PopBoxClosed={PopBoxClosed} />
                         : ""}
